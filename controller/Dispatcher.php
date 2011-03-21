@@ -6,7 +6,9 @@ class Dispatcher {
 
 	public static function dispatch() {
 
-		$request = str_replace(Config::getVal('misc', 'dispatcher_limit'), '', $_SERVER['REQUEST_URI']);
+	    if(Config::getVal('misc', 'dispatcher_limit') != "")
+		    $request = str_replace(Config::getVal('misc', 'dispatcher_limit'), '', $_SERVER['REQUEST_URI']);
+
 
 		if(substr($request, 0,1) == "/") {
 		    $request = substr($request, 1);
