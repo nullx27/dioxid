@@ -21,16 +21,9 @@ class RestfulController extends Controller {
                                             'info' => array('OPTIONS'));
 
     protected static function useREST($callbacks = array(), $class=Null){
+
         if(!is_array($callbacks)) return false;
 
-
-
-
-        foreach($callbacks as $callback){
-            if(!array_key_exists($callback, static::$allowed_methods)){
-                return false;
-            }
-        }
 
         $method = $_SERVER['REQUEST_METHOD'];
 
@@ -43,6 +36,7 @@ class RestfulController extends Controller {
         }
 
        elseif(in_array($method, static::$allowed_methods['read'])){
+
             call_user_func(array($class, $callbacks['read']));
             return;
         }
