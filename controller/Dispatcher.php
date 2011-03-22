@@ -1,21 +1,49 @@
 <?php
+
+/**
+ * Dispatcher.php - dioxid
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @version 1.0
+ * @package controller
+ */
+
 namespace dioxid\controller;
 use dioxid\config\Config;
 
+/**
+ * dioxid\controller$Dispatcher
+ * Crawls the URL for requestet Controller and Actions and calls them. At the moment the only supported
+ * URL Schema is http://example.com/dispatcher_limit/controller/arction/key/value/
+ *
+ * If no Controller is provided the dispatcher tries to call an Index Controller, if no action is provided
+ * the index action is called.
+ *
+ * It lackes error handling at the moment, so beware!
+ *
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @date 22.03.2011 14:34:20
+ *
+ */
 class Dispatcher {
 
+	/**
+	 * Method: dispatch
+	 * Crawls the URL and calls the requested Controller and Action
+	 */
 	public static function dispatch() {
 
+		// If theres no dispatcher limit dont replace anything
 	    if(Config::getVal('misc', 'dispatcher_limit') != "")
 		    $request = str_replace(Config::getVal('misc', 'dispatcher_limit'), '', $_SERVER['REQUEST_URI']);
 
-
+		//if the first thign in the $request is a / remove it, so it cant cause later any problems
 		if(substr($request, 0,1) == "/") {
 		    $request = substr($request, 1);
 		}
 
 		$chunks = explode('/',$request);
 
+		// if no controller is provided
 		if($chunks[0] == ""){
 			static::load(Config::getVal('misc', 'controller_namespace') . 'Index', 'index');
 		    return;
@@ -23,12 +51,15 @@ class Dispatcher {
 
 		$class = Config::getVal('misc', 'controller_namespace') . $chunks[0];
 
+		//This fixes a weired bug where it tries to load a namespace without controller
 		if(substr($class, -1) == "\\") return;
 
+		//If a Controller but no Action is provided
 		if(count($chunks) == 1 && $chunks[0] != ""){
 			static::load($class, 'index');
 		}
 
+		//If a Controller and an Action is provided
 		if(count($chunks) >= 2) {
 
 			$method = $chunks[1];
@@ -45,6 +76,15 @@ class Dispatcher {
 		}
 	}
 
+	/**
+	 * Method: load
+	 * Calls the Controller and the action and sets the params
+	 * This lacks also error handling.
+	 *
+	 * @param string $class fully quallified class with namespace
+	 * @param string $method the action which was requested
+	 * @param mixed $params
+	 */
 	public static function load($class, $method, $params=Null) {
 		if(class_exists($class)){
 

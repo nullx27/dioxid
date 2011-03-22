@@ -1,8 +1,10 @@
 <?php
 
-/*
- * Author: Necro
- * File: Csv.php
+/**
+ * Csv.php - dioxid
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @version 1.0
+ * @package lib
  */
 
 namespace dioxid\lib;
@@ -10,8 +12,20 @@ namespace dioxid\lib;
 use dioxid\lib\Base;
 use Exception;
 
+/**
+ *
+ * Better Interface to work with CSV files
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @date 22.03.2011 14:12:42
+ *
+ */
 class CSV extends Base {
 
+	/**
+	 * Pareses a CSV file and returns an Assoc Array
+	 * @param string $str The CSV file as a string
+	 * @return array Assoc Array
+	 */
     public static function parse($str) {
         $out = array();
         $chunks = explode("\n", $str);

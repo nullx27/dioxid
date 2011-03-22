@@ -1,8 +1,10 @@
 <?php
 
-/*
- * Author: Necro
- * File: model.php
+/**
+ * Model.php - dioxid
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @version 1.0
+ * @package model
  */
 
 namespace  dioxid\model;

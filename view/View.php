@@ -1,10 +1,10 @@
 <?php
 
-/*
- * Author: Necro
- * File: View.php
- *
- * A Wrapper for H2O
+/**
+ * View.php - dioxid
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @version 1.0
+ * @package view
  */
 
 namespace dioxid\view;

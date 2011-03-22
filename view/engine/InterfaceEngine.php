@@ -1,8 +1,10 @@
 <?php
 
-/*
- * Author: Necro
- * File: InterfaceEngine.php
+/**
+ * InterfaceEngine.php - dioxid
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @version 1.0
+ * @package view/engine
  */
 
 namespace dioxid\view\engine;
