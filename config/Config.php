@@ -23,6 +23,8 @@ class Config {
 	 */
 	private static $config;
 
+	private static $tmpConfig = array();
+
 	public function __construct() { }
 
 	/**
@@ -34,7 +36,9 @@ class Config {
 		static::$config = parse_ini_string($config, true);
 	}
 
-	/**
+
+
+	/**t
 	 * Method: getVal
 	 * Gets a Value form the Config
 	 * @param string $section Specify the Section
@@ -44,11 +48,29 @@ class Config {
 		if(key_exists($section, static::$config) && key_exists($val, static::$config[$section])){
 			return static::$config[$section][$val];
 		}
-		return false;
 
+		return false;
 
 	}
 
+	/**
+	 * Method: getSection
+	 * Reutrns a complete section as an Array
+	 * @param string $section
+	 * @retrun array
+	 */
+	public static function getSection($section){
+		if(key_exists($section, static::$config)){
+			return static::$config[$section];
+		}
+	}
+
+
+	//TODO: YAML Configfile
+
+	//TODO: cache file
+
+	//TODO: add new values permanent or temp
 
 }
 

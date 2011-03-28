@@ -12,7 +12,8 @@ namespace dioxid\view\engine;
 use dioxid\lib\Base;
 use dioxid\config\Config;
 use dioxid\view\engine\InterfaceEngine;
-use dioxid\exception\TemplateNotFound;
+
+use dioxid\exception\TemplateNotFoundException;
 
 class SimpleEngine extends Base implements InterfaceEngine {
 
@@ -36,7 +37,6 @@ class SimpleEngine extends Base implements InterfaceEngine {
             throw TemplateNotFound;
         }
     }
-
 
     public static function show(){
         print static::$output;

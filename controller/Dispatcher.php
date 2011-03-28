@@ -8,6 +8,8 @@
  */
 
 namespace dioxid\controller;
+
+use dioxid\controller\Controller;
 use dioxid\config\Config;
 
 /**
@@ -65,11 +67,11 @@ class Dispatcher {
 			$method = $chunks[1];
 
 			//Build the GET params
-			$us_param = array_slice($chunks, 2);
+			$get = array_slice($chunks, 2);
 
-			for($i=0; $i<=count($us_param)-1; $i+=2){
-				$param[ $us_param[$i] ] = $us_param[$i+1];
-				if($us_param[$i] == "" || $us_param[$i+1] == "") break;
+			for($i=0; $i<=count($get)-1; $i+=2){
+				$param[ $get[$i] ] = $get[$i+1];
+				if($get[$i] == "" || $get[$i+1] == "") break;
 			}
 
 			static::load($class, $method, $param);
@@ -94,7 +96,7 @@ class Dispatcher {
 			    if(substr($method, 0,1) == "_") return false;
 
                 //if the controller extends dioxid\controller\Controller call it over an instance of the class
-			    if(method_exists($class, 'getInstance')){
+			    if(is_subclass_of($class, 'dioxid\controller\Controller')){
 
 			        $instance = $class::getInstance();
 				    ($params) ? $instance::_setParamArray($params): "";

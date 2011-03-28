@@ -66,7 +66,7 @@ class RestfulController extends Controller {
             return;
         }
 
-        elseif(in_array($method, tatic::$allowed_methods['update'])){
+        elseif(in_array($method, static::$allowed_methods['update'])){
             call_user_func(array($class, $callbacks['update']));
             return;
         }

@@ -11,7 +11,7 @@ namespace dioxid\lib;
 
 /**
  * dioxid\lib$Base
- * Baseclass which defindes mostly the getInstance method used for the late static binding in most of the the other classes
+ * Baseclass which main purpose it is to garantee the use of singletons
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @date 22.03.2011 14:54:19
  * @abstract
@@ -24,7 +24,8 @@ abstract class Base {
 	 */
     protected static $instances = array();
 
-    public function __construct(){}
+    final private function __construct(){}
+	final private function  __clone() { }
 
     /**
      * Method: getInstance

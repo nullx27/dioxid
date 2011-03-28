@@ -8,6 +8,7 @@
  */
 
 namespace dioxid;
+use Exception;
 
 class Loader {
     protected static $setup;
@@ -28,7 +29,6 @@ class Loader {
             } catch (Exception $e) {
                 return false;
             }
-
 	    } else {
             return false;
 	    }

@@ -9,25 +9,38 @@
 
 namespace dioxid\view;
 
+use dioxid\exception\TemplateNotFoundException;
+
 use dioxid\config\Config;
-use dioxid\lib\Base;
+use dioxid\exception\EngineNotFoundException;
 
-require_once __DIR__ . '/../lib/h2o/h2o.php';
+class View {
+	protected static $engine;
 
-class View extends Base {
+	public static function getView($tmpl=NUll){
+		$engine_class = __NAMESPACE__ . '\\engine\\' . ucfirst(Config::getVal('view', 'engine')) . 'Engine';
 
-    protected static $h2o;
+		if(class_exists($engine_class)) {
+			static::$engine = $engine_class::getInstance();
+		} else {
+			throw new EngineNotFoundException;
+		}
 
-    public function __construct($tmpl, $class){
-        if(!$tmpl){
 
-        }
-    }
 
-    public static function getView($tmpl=NUll){
-		$class = get_called_class();
-		if (!isset(static::$instances[$class]))  static::$instances[$class] = new $class($tmpl, $class);
-		return static::$instances[$class];
+
+		if($tmpl){
+			call_user_func(static::$engine, Config::getVal('path', 'template_path') . Config::getVal('path', 'template_path') . DIRECTORY_SEPARATOR .  $tmpl);
+		} else {
+
+			$name = end(explode("\\", __CLASS__));
+
+			if(file_exists(Config::getVal('path', 'app_path') . Config::getVal('path', 'template_path') . '/' . $name . 'phtml')){
+				call_user_func(static::$engine, Config::getVal('path', 'app_path') . Config::getVal('path', 'template_path') . DIRECTORY_SEPARATOR . $name . 'phtml');
+			} else {
+				throw new TemplateNotFoundException();
+			}
+		}
 	}
 }
 

@@ -26,8 +26,6 @@ abstract class Controller extends Base {
 	 */
 	protected static $params = array();
 
-	public function __construct() { }
-
 	/**
 	 * Method: index
 	 * Dummy index Action
@@ -83,6 +81,14 @@ abstract class Controller extends Base {
             return static::$params[$key];
         }
         return false;
+	}
+
+	/**
+	 * Method: init
+	 * Replacement for the class consturctor
+	 */
+	private static function init(){
+
 	}
 
 }
