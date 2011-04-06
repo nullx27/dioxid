@@ -8,7 +8,10 @@
  */
 
 namespace  dioxid\model;
+
+use dioxid\config\Config;
 use dioxid\lib\Base;
+use Exception;
 use PDO;
 
 abstract class Model extends Base {
@@ -36,6 +39,12 @@ abstract class Model extends Base {
     public static function __callStatic ( $name, $args ) {
         $callback = array ( static::$pdo, $name ) ;
         return call_user_func_array ( $callback , $args ) ;
+    }
+
+    public static function factory($backend=Null){
+		if(!$backend){
+			// use backin in config
+		}
     }
 }
 

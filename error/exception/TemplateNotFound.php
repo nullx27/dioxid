@@ -7,14 +7,13 @@
  * @package exceptions
  */
 
-namespace dioxid\exception;
+namespace dioxid\error\exception;
 
-use dioxid\exception\BaseException;
+use dioxid\error\exception\BaseException;
 
 class TemplateNotFoundException extends BaseException {
-
+	protected $code = 500;
 }
 
-?>
 
 ?>

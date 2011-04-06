@@ -6,9 +6,13 @@
  * @package package_name
  */
 
-namespace dioxid\exception;
+namespace dioxid\lib\log\engine;
+
+use dioxid\lib\log\LogInterface;
 
 
-class EngineNotFoundException extends BaseException {}
+class FileEngine implements LogInterface {
+
+}
 
 ?>

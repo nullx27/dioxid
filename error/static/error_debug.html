@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Error</title>
+        <style type="text/css">
+            body{background-color:#444;margin:0;padding:0;font-family:Helvetica,Arial,sans-serif;font-size:10px;}
+            #wrap{position:absolute;top:200px;width:100%;}
+            #wrap h1 {text-align:center; font-size: 35px; color:white}
+            #wrap h2 {text-align:center; font-size: 18px; color:white}
+            .errorbox{border-top:3px solid #eaa;border-bottom:3px solid #eaa;background-color:#151515;color:#aae;font-size:1.8em;line-height:1.4em;padding:14px 0 11px 0;}
+            .errorbox p{width:100%;margin:0 auto;text-align:center;}
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+	        <h1>$msg</h1>
+	        <h2>$file has caught an error on line $line</h2>
+
+
+	        <div class="errorbox">
+	           <h2>Stacktrace:</h2>
+	           <p>$stactrace</p>
+	        </div>
+        </div>
+    </body>
+</html>

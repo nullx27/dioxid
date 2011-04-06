@@ -8,12 +8,12 @@
  */
 
 
-namespace dioxid\exception;
+namespace dioxid\error\exception;
 
-use dioxid\exception\BaseException;
+use dioxid\error\exception\BaseException;
 
 class NotFoundException extends BaseException {
-
+	protected $code = 404;
 }
 
 ?>

@@ -22,7 +22,9 @@ class Loader {
 	    $chunks = explode('\\', $namespace);
 
 	    if(key_exists($chunks[0], static::$setup)){
-            $path = static::$setup[$chunks[0]] . '/' . str_replace('\\', '/', substr($namespace, strlen($chunks[0]) + 1)) . '.php';
+            $path = static::$setup[$chunks[0]] . DIRECTORY_SEPARATOR .
+            	str_replace('\\', DIRECTORY_SEPARATOR,
+            	substr($namespace, strlen($chunks[0]) + 1)) . '.php';
 
             try {
                 require_once($path);

@@ -7,7 +7,7 @@
  * @package exceptions
  */
 
-namespace dioxid\exception;
+namespace dioxid\error\exception;
 use dioxid\lib\Base;
 use Exception;
 

@@ -15,6 +15,8 @@ namespace dioxid\config;
  * @date 22.03.2011 14:16:21
  *
  */
+use dioxid\error\exception\RequiredValNotFoundException;
+
 class Config {
 
 	/**
@@ -44,10 +46,12 @@ class Config {
 	 * @param string $section Specify the Section
 	 * @param string $val the Key
 	 */
-	public static function getVal($section, $val){
+	public static function getVal($section, $val, $required = false){
 		if(key_exists($section, static::$config) && key_exists($val, static::$config[$section])){
 			return static::$config[$section][$val];
 		}
+
+		if($required) throw new RequiredValNotFoundException("Required Val, $val not found in $section");
 
 		return false;
 

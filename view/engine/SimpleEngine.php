@@ -11,7 +11,7 @@ namespace dioxid\view\engine;
 
 use dioxid\lib\Base;
 use dioxid\config\Config;
-use dioxid\view\engine\InterfaceEngine;
+use dioxid\view\InterfaceEngine;
 
 use dioxid\exception\TemplateNotFoundException;
 

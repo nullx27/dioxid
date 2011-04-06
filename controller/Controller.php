@@ -83,14 +83,6 @@ abstract class Controller extends Base {
         return false;
 	}
 
-	/**
-	 * Method: init
-	 * Replacement for the class consturctor
-	 */
-	private static function init(){
-
-	}
-
 }
 
 ?>

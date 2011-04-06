@@ -12,6 +12,10 @@ use dioxid\lib\base;
 
 class Session extends Base {
 
+	public static function init(){
+		session_start();
+	}
+
 }
 
 ?>

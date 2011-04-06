@@ -9,6 +9,8 @@
 
 namespace dioxid\controller;
 
+use dioxid\error\exception\NotFoundException;
+
 use dioxid\controller\Controller;
 use dioxid\config\Config;
 
@@ -71,7 +73,7 @@ class Dispatcher {
 
 			for($i=0; $i<=count($get)-1; $i+=2){
 				$param[ $get[$i] ] = $get[$i+1];
-				if($get[$i] == "" || $get[$i+1] == "") break;
+				if($get[$i] == "" && $get[$i+1] == "") break;
 			}
 
 			static::load($class, $method, $param);
@@ -110,7 +112,7 @@ class Dispatcher {
 			    }
 
 			} else {
-				print "Method $method does not exists";
+				throw new NotFoundException('Method not Found');
 				return false;
 			}
 		} else {

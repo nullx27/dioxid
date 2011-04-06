@@ -24,8 +24,15 @@ abstract class Base {
 	 */
     protected static $instances = array();
 
-    final private function __construct(){}
+    final private function __construct(){
+		static::init();
+    }
+
 	final private function  __clone() { }
+
+	private static function init(){
+		return;
+	}
 
     /**
      * Method: getInstance
