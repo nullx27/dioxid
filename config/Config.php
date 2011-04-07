@@ -34,6 +34,8 @@ class Config {
 	 * @param string $path
 	 */
 	public static function loadConfig($path){
+
+		//TODO: Configfile cahce with serialize usw
 		$config = file_get_contents($path);
 		static::$config = parse_ini_string($config, true);
 	}

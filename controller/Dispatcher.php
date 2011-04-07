@@ -70,6 +70,7 @@ class Dispatcher {
 
 			//Build the GET params
 			$get = array_slice($chunks, 2);
+			$param = array();
 
 			for($i=0; $i<=count($get)-1; $i+=2){
 				$param[ $get[$i] ] = $get[$i+1];

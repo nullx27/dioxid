@@ -25,12 +25,12 @@ abstract class Base {
     protected static $instances = array();
 
     final private function __construct(){
-		static::init();
+		static::_init();
     }
 
 	final private function  __clone() { }
 
-	private static function init(){
+	public static function _init(){
 		return;
 	}
 

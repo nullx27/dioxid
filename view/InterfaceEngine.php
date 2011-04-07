@@ -11,13 +11,15 @@ namespace dioxid\view;
 
 interface InterfaceEngine {
 
-    public static function getInstance(){}
+    public static function getInstance();
 
-    public static function load(){}
+    public static function load($folder, $template);
 
-    public static function process(){}
+    public static function process();
 
-    public static function show(){}
+    public static function show();
+
+    public static function finally();
 }
 
 ?>
