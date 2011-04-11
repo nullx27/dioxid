@@ -25,7 +25,7 @@ abstract class Base {
     protected static $instances = array();
 
     final private function __construct(){
-		static::_init();
+		static::_init(implode(',', func_get_args()));
     }
 
 	final private function  __clone() { }
@@ -41,7 +41,8 @@ abstract class Base {
      */
     public static function getInstance(){
 		$class = get_called_class();
-		if (!isset(static::$instances[$class]))  static::$instances[$class] = new $class();
+		$args = implode(',', func_get_args());
+		if (!isset(static::$instances[$class]))  static::$instances[$class] = new $class($args);
 		return static::$instances[$class];
 	}
 }
