@@ -7,7 +7,9 @@
  * @package lib
  */
 namespace dioxid\lib;
+
 use dioxid\lib\base;
+use dioxid\lib\Session;
 
 class ACL extends Base {
 

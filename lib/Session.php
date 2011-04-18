@@ -8,14 +8,22 @@
  */
 
 namespace dioxid\lib;
-use dioxid\error\exception\NamespaceAllreadyExistsException;
 
-use dioxid\lib\base;
+use dioxid\error\exception\NamespaceAllreadyExistsException;
 
 class Session {
 
+	/**
+	 * Variable Namespace for the Session
+	 * @var string
+	 */
 	protected $namespace;
 
+	/**
+	 * Method: __construct
+	 * @param unknown_type $namespace
+	 * @throws NamespaceAllreadyExistsException
+	 */
 	public function __construct($namespace){
 		$this->namespace = $namespace;
 		session_start();

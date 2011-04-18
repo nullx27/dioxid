@@ -65,7 +65,7 @@ class Dispatcher {
 
 		//If a Controller and an Action is provided
 		if(count($chunks) >= 2) {
-
+		//TODO: Get traditional get params like ?fuu=bar&baz=fu
 			$method = $chunks[1];
 
 			//Build the GET params

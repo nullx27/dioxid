@@ -43,7 +43,7 @@ abstract class Model extends Base {
 
     public static function factory($backend=Null){
 		if(!$backend){
-			// use backin in config
+			$backend = Config::getVal('database', 'driver');
 		}
     }
 }

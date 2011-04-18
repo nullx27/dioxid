@@ -55,8 +55,7 @@ class RestfulController extends Controller {
         if(in_array($method, static::$allowed_methods['create'])) {
 			//If Create were requested the callback gets called with an filediscriptor to the putdata
 			$putdata = fopen("php://input", "r");
-            call_user_func_array(array($class, $callbacks['create']), array($putdata));
-            fclose($putdata);
+            call_user_func_array(array($class, $callbacks['create']), array(&$putdata));
             return;
         }
 
