@@ -38,7 +38,7 @@ class Dispatcher {
 
 		// If theres no dispatcher limit dont replace anything
 	    if(Config::getVal('misc', 'dispatcher_limit') != "")
-		    $request = str_replace(Config::getVal('misc', 'dispatcher_limit'), '', $_SERVER['REQUEST_URI']);
+		    $request = str_replace(Config::getVal('misc', 'dispatcher_limit', true), '', $_SERVER['REQUEST_URI']);
 
 		//if the first thign in the $request is a / remove it, so it cant cause later any problems
 		if(substr($request, 0,1) == "/") {
@@ -49,11 +49,11 @@ class Dispatcher {
 
 		// if no controller is provided
 		if($chunks[0] == ""){
-			static::load(Config::getVal('misc', 'controller_namespace') . 'Index', 'index');
+			static::load(Config::getVal('misc', 'controller_namespace',true) . 'Index', 'index');
 		    return;
 		}
 
-		$class = Config::getVal('misc', 'controller_namespace') . $chunks[0];
+		$class = Config::getVal('misc', 'controller_namespace', true) . $chunks[0];
 
 		//This fixes a weired bug where it tries to load a namespace without controller
 		if(substr($class, -1) == "\\") return;
@@ -65,9 +65,9 @@ class Dispatcher {
 
 		//If a Controller and an Action is provided
 		if(count($chunks) >= 2) {
-		//TODO: Get traditional get params like ?fuu=bar&baz=fu
 			$method = $chunks[1];
 
+			//TODO: Traditional GET Params breaking the dispatcher
 			//Build the GET params
 			$get = array_slice($chunks, 2);
 			$param = array();
@@ -113,11 +113,11 @@ class Dispatcher {
 			    }
 
 			} else {
-				throw new NotFoundException('Method not Found');
+				throw new NotFoundException('Action "'.$method.'" not Found');
 				return false;
 			}
 		} else {
-			print "Class $class does not exists";
+			throw new NotFoundException("Controller \"$class\" does not exists");
 			return false;
 		}
 	}

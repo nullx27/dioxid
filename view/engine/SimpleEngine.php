@@ -20,10 +20,31 @@ use dioxid\error\exception\TemplateNotFoundException;
 
 class SimpleEngine extends Base implements InterfaceEngine {
 
+	/**
+	 * Fullpath to the template
+	 * @var mixed
+	 */
     protected static $_file = false;
+
+    /**
+     * The process template
+     * @var string
+     */
     protected static $_output = false;
+
+    /**
+     * The template Variables
+     * @var array
+     */
     protected static $_vars = array();
 
+    /**
+     * Class Constructor
+     * Tries to load the template from the template folder
+     * If in the templatefolder an folder named like the controller exists
+     * and in this folder is an template named after the action, which was
+     * called, it will be loaded as a template
+     */
     public static function _init() {
 
     	$trace=debug_backtrace();
@@ -34,11 +55,16 @@ class SimpleEngine extends Base implements InterfaceEngine {
 		try {
 			static::load($folder, $template, true);
 		}
-		catch (TemplateNotFoundException $e) {
-
-		}
+		catch (TemplateNotFoundException $e) {}
     }
 
+    /**
+     * Method: load
+     * Loads the Template
+     * @param string $folder the template folder
+     * @param string $template the template name
+     * @param bool $without_ext extent the templateextension to the templatename automaticly
+     */
     public static function load($folder, $template, $without_ext=false){
         if(!$template || !$folder){
           throw new TemplateNotFoundException('No template provided');
@@ -46,9 +72,13 @@ class SimpleEngine extends Base implements InterfaceEngine {
 
         //fully quallified template path
         if($without_ext) {
-        	$fqtp = Config::getVal('path', 'app_path') . Config::getVal('path', 'template_path') . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $template . Config::getVal('view', 'extension');
+        	$fqtp = Config::getVal('path', 'app_path') .
+        		Config::getVal('path', 'template_path') . DIRECTORY_SEPARATOR .
+        		$folder . DIRECTORY_SEPARATOR . $template .
+        		Config::getVal('view', 'extension');
         } else {
-        	$fqtp = Config::getVal('path', 'app_path') . Config::getVal('path', 'template_path') . "/" .  $template;
+        	$fqtp = Config::getVal('path', 'app_path') .
+        	Config::getVal('path', 'template_path') . "/" .  $template;
         }
 
         if(file_exists($fqtp)){
@@ -58,6 +88,11 @@ class SimpleEngine extends Base implements InterfaceEngine {
         }
     }
 
+    /**
+     * Method: process
+     * Processes the Template
+     * @throws TemplateNotFoundException
+     */
     public static function process(){
 		if(!static::$_file) throw new TemplateNotFoundException('No template loaded!');
 
@@ -74,20 +109,40 @@ class SimpleEngine extends Base implements InterfaceEngine {
 		static::$_output = $__content;
     }
 
+    /**
+     * Method: assign
+     * Assigns an Element to an key, so it kann be called in the template
+     * @param string $key
+     * @param mixed $val
+     */
     public static function assign($key, $val){
     	static::$_vars[$key] = $val;
     }
 
+    /**
+     * Method: assignArray
+     * Assings an Array of key/value pairs to the template
+     * @param unknown_type $arr
+     */
     public static function assignArray($arr){
-		foreach($arr as $key => $val)
-			static::assign($key, $val);
+		array_merge(static::$_vars, $arr);
     }
 
+    /**
+     * Method: show
+     * Prints the Processed template
+     * @throws TemplateNotFoundException
+     */
     public static function show(){
     	if(!static::$_output) throw new TemplateNotFoundException("Template not processed!");
         print static::$_output;
     }
 
+    /**
+     * Method: finally
+     * Gets called in the destructor of the View Object
+     * Calls the process and show function of this class
+     */
     public static function finally(){
     	static::process();
     	static::show();

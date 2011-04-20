@@ -20,6 +20,20 @@ class CookieJar {
 
 	protected static $registry = array();
 
+	private static function checkCache(){
+		$file = Config::getVal('path', 'app_path', true) . DIRECTORY_SEPARATOR .
+			Config::getVal('path', 'cache', true) . DIRECTORY_SEPARATOR . "cookie.dat";
+		if(!file_exists($file)){
+			try{
+				$h = fopen($file, 'x+');
+				fclose($h);
+			}
+			catch (Exception $e){
+				throw new CouldNotWriteToCacheException($e->getMessage);
+			}
+		}
+	}
+
 	private static function save(){
 		$file = Config::getVal('path', 'app_path', true) . DIRECTORY_SEPARATOR .
 			Config::getVal('path', 'cache', true) . DIRECTORY_SEPARATOR . "cookie.dat";
@@ -36,7 +50,7 @@ class CookieJar {
 		}
 	}
 
-	private static function load(){
+	public static function load(){
 		$file = Config::getVal('path', 'app_path', true) . DIRECTORY_SEPARATOR .
 			Config::getVal('path', 'cache', true) . DIRECTORY_SEPARATOR . "cookie.dat";
 
@@ -47,13 +61,17 @@ class CookieJar {
 			throw new CouldNotWriteToCacheException($e->getMessage());
 		}
 
-		static::cleanUp();
+
 		static::$registry = unserialize($data);
+		static::cleanUp();
 	}
 
 	private static function cleanUp(){
 		foreach(static::$registry as $domain => $cookie){
-			if($cookie->isExpiered()) unset($cookie);
+			if($cookie->isExpiered()){
+				unset($cookie);
+				unset(static::$registry[$domain]);
+			}
 		}
 		static::$registry = array_values(static::$registry);
 	}
@@ -63,8 +81,9 @@ class CookieJar {
 			static::$registry[$domain] = new Cookie($expiere);
 		}
 
-		$cookie = &static::$registry[$domain];
-		$cookie->addData($data);
+		static::$registry[$domain]->addData($data);
+		print_r(static::$registry[$domain]->data);
+		static::save();
 	}
 
 	public static function setCookieString($domain, $str, $expiere=350){
@@ -113,8 +132,18 @@ class CookieJar {
 	}
 
 	public static function getCookie($domain){
+		static::load();
 		if(key_exists($domain, static::$registry))
 			return static::$registry[$domain]->data;
+		return false;
+	}
+
+	public static function getCookieValue($domain, $key){
+		static::load();
+		if(key_exists($domain, static::$registry))
+			if(key_exists($key, static::$registry[$domain]->data)){
+				return static::$registry[$domain]->data[$key];
+			}
 		return false;
 	}
 
@@ -141,6 +170,29 @@ class CookieJar {
 
 	public static function debug (){
 		print_r(static::$registry);
+	}
+
+	public static function getCookieFromWebsite($url){
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		$out = curl_exec($ch);
+
+		preg_match_all('/^Set-Cookie: (.*?);/m',$out , $m);
+		$o = array();
+		foreach($m[1] as $k => $v) {
+			$a = explode("=", urldecode($v));
+			$o[$a[0]] = $a[1];
+		}
+
+		return $o;
+
+	}
+
+	public static function domainExists($domain){
+		static::load();
+		return key_exists($domain, static::$registry);
 	}
 }
 
