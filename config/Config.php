@@ -25,24 +25,49 @@ class Config {
 	 */
 	private static $config;
 
-	private static $tmpConfig = array();
-
 	public function __construct() { }
 
 	/**
 	 * Loads a configfile
 	 * @param string $path
+	 * @param bool $cahced should the config file get cached?
 	 */
-	public static function loadConfig($path){
-
-		//TODO: Configfile cahce with serialize usw
-		$config = file_get_contents($path);
-		static::$config = parse_ini_string($config, true);
+	public static function loadConfig($path, $cached=false){
+		$cached ? static::loadCached($path) : static::loadIni($path);
 	}
 
+	/**
+	 * Method: loadCached
+	 * Loads the cached config file or if the config is not cached,
+	 * it gets cached
+	 * @param string $path path to the config file
+	 */
+	public static function loadCached($path){
+		$tmp = explode('/', $path);
+		$conf = end($tmp);
+		$folder = substr($path, 0, (strlen($path) - strlen($conf)));
 
+		$cachefile = $folder . ".". $conf . ".cache";
+		if(file_exists($cachefile) && filectime($cachefile) > filectime($path)){
+			static::$config = unserialize(file_get_contents($cachefile));
+		} else {
+			$conf = static::loadIni($path);
+			file_put_contents($cachefile, serialize(static::$config));
+		}
+	}
 
-	/**t
+	/**
+	 * Method: loadIni
+	 * Loads the Configuration
+	 * @param string $path path to the config file
+	 */
+	public static function loadIni($path){
+		//TODO: Try/catch that fucker if it fails
+		$time = microtime(true);
+		static::$config =  parse_ini_string(file_get_contents($path), true);
+	}
+
+	/**
 	 * Method: getVal
 	 * Gets a Value form the Config
 	 * @param string $section Specify the Section
@@ -53,10 +78,9 @@ class Config {
 			return static::$config[$section][$val];
 		}
 
-		if($required) throw new RequiredValNotFoundException("Required Val, $val not found in $section");
+		if($required) throw new RequiredValNotFoundException("Required Val \"$val\" not found in $section");
 
 		return false;
-
 	}
 
 	/**
@@ -70,11 +94,6 @@ class Config {
 			return static::$config[$section];
 		}
 	}
-
-
-	//TODO: YAML Configfile
-
-	//TODO: cache file
 
 	//TODO: add new values permanent or temp
 
