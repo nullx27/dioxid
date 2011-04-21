@@ -36,16 +36,11 @@ class Session {
 		}
 
 		$_SESSION[$this->namespace][$key] = $val;
-		return true;
 	}
 
 	public function __get($key){
 		if($key == "id") return session_id();
-
-		if(in_array($_SESSION[$this->namespace], $key)){
-			return $_SESSION[$this->namespace][$key];
-		return false;
-		}
+		return $_SESSION[$this->namespace][$key];
 	}
 
 	public function destroy(){
