@@ -38,6 +38,9 @@ class SimpleEngine extends Base implements InterfaceEngine {
      */
     protected static $_vars = array();
 
+
+    protected static $_disallow_output = false;
+
     /**
      * Class Constructor
      * Tries to load the template from the template folder
@@ -88,6 +91,8 @@ class SimpleEngine extends Base implements InterfaceEngine {
         }
     }
 
+
+
     /**
      * Method: process
      * Processes the Template
@@ -107,6 +112,26 @@ class SimpleEngine extends Base implements InterfaceEngine {
 		}
 
 		static::$_output = $__content;
+    }
+
+
+    /**
+     * Method: disableOutput
+     * Disables automatic output on destruction of the object
+     */
+    public static function disableOutput(){
+		static::$_disallow_output = true;
+    }
+
+    /**
+     * Method: getOutput
+     * Procresses the template if its not procressed and returns the output
+     * @return string static::$_output
+     */
+    public static function getOutput(){
+    	if(!static::$_output)
+    		static::process();
+        return static::$_output;
     }
 
     /**
@@ -138,14 +163,20 @@ class SimpleEngine extends Base implements InterfaceEngine {
         print static::$_output;
     }
 
+    public static function loadLayout(){
+		//TODO:: loadLayout
+    }
+
     /**
      * Method: finally
      * Gets called in the destructor of the View Object
      * Calls the process and show function of this class
      */
     public static function finally(){
-    	static::process();
-    	static::show();
+    	if(!static::$_disallow_output){
+    		static::process();
+    		static::show();
+    	}
     }
 }
 
