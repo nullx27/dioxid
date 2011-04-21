@@ -27,7 +27,6 @@ class Session {
 	public function __construct($namespace){
 		$this->namespace = $namespace;
 		session_start();
-		if(in_array($_SESSION, $namespace)) throw new NamespaceAllreadyExistsException("$namespace allready used in session");
 	}
 
 	public function __set($key, $val) {
