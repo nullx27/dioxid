@@ -11,7 +11,7 @@ namespace dioxid\error;
 
 use dioxid\error\exception\BaseException;
 
-class CantEtablishDatabaseConnectionExcepttion extends BaseException {
+class CantEtablishDatabaseConnectionException extends BaseException {
 	protected $code = 403;
 }
 
