@@ -26,6 +26,8 @@ abstract class Controller extends Base {
 	 */
 	protected static $params = array();
 
+	protected static $baseUrl = array();
+
 	/**
 	 * Method: index
 	 * Dummy index Action
@@ -83,6 +85,26 @@ abstract class Controller extends Base {
         return false;
 	}
 
+
+	public static function _setCalledUrl($url_arr){
+		static::$baseUrl = $url_arr;
+	}
+
+	public static function _getBaseUrl(){
+		return static::$baseUrl['scheme'] . '://' . static::$baseUrl['host'];
+	}
+
+	public static function _getBaseUrlPath(){
+		return static::$baseUrl['path'];
+	}
+
+	public static function _getFullUrl(){
+		return static::$baseUrl['scheme'] . '://' .
+				static::$baseUrl['host'] .
+				((@static::$baseUrl['port']) ? ':' .@static::$baseUrl['port'] : "") . '/' .
+				static::$baseUrl['path'] .
+				((@static::$baseUrl['query']) ? '?' .@static::$baseUrl['query'] : "");
+	}
 }
 
 ?>
