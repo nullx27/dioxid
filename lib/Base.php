@@ -25,7 +25,7 @@ abstract class Base {
     protected static $instances = array();
 
     final private function __construct(){
-		static::_init(implode(',', func_get_args()));
+    	call_user_func_array(array(__CLASS__, '_init'), array(implode(',', func_get_args())));
     }
 
 	final private function  __clone() { }
