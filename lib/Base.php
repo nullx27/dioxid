@@ -25,14 +25,15 @@ abstract class Base {
     protected static $instances = array();
 
     final private function __construct(){
-    	call_user_func_array(array(__CLASS__, '_init'), array(implode(',', func_get_args())));
+    	$class = get_called_class();
+    	if(method_exists($class, '_init')){
+    		call_user_func_array(array($class, '_init'),
+    			array(implode(',', func_get_args())));
+    	}
     }
 
 	final private function  __clone() { }
 
-	public static function _init(){
-		return;
-	}
 
     /**
      * Method: getInstance

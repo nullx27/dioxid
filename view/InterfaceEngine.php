@@ -13,13 +13,15 @@ interface InterfaceEngine {
 
     public static function getInstance();
 
-    public static function load($folder, $template);
+    public function load($folder, $template);
 
-    public static function process();
+    public function assign($key, $value);
 
-    public static function show();
+    public function process();
 
-    public static function finally();
+    public function show();
+
+    public function finally();
 }
 
 ?>

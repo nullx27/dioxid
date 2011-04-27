@@ -10,6 +10,8 @@
 namespace dioxid\controller;
 use dioxid\lib\Base;
 
+use dioxid\view\View;
+
 /**
  * dioxid\controller$Controller
  * Baseclass for Normal Controllers
@@ -104,6 +106,11 @@ abstract class Controller extends Base {
 				((@static::$baseUrl['port']) ? ':' .@static::$baseUrl['port'] : "") . '/' .
 				static::$baseUrl['path'] .
 				((@static::$baseUrl['query']) ? '?' .@static::$baseUrl['query'] : "");
+	}
+
+
+	protected static function getView(){
+		return View::getInstance();
 	}
 }
 
