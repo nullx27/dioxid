@@ -22,7 +22,10 @@ use dioxid\error\exception\EngineNotFoundException;
 use dioxid\error\exception\MethodNotFoundException;
 
 class View extends Base {
+
 	public static $engine;
+
+	public static $helper = array();
 
 	public static function _init(){
 
@@ -33,6 +36,8 @@ class View extends Base {
 
 			static::$engine = false;
 		}
+
+		static::loadDefaultHelpers();
 	}
 
 	public static function setEngine($engine){
@@ -85,17 +90,23 @@ class View extends Base {
 	}
 
 
-	public static function useHelper($name) {
+	public static function useHelper($name, $class=false) {
 		if (($pos = strripos($name, 'Helper')) !== false) {
             $name = substr($name, 0, $pos);
         }
 
-		$class = __NAMESPACE__ . '\\helper\\' . ucfirst($name) . 'Helper';
+        if(!$class)
+			$class = __NAMESPACE__ . '\\helper\\' . ucfirst($name) . 'Helper';
+
 
 		if(!class_exists($class))
 			throw new ClassNotFoundException("Helper $name not found");
 
-		static::$engine->assign('_'. $name, $class::getInstance());
+		static::$engine->handleHelper($name, new $class);
+	}
+
+	public static function loadDefaultHelpers(){
+		static::useHelper('baseUrl');
 	}
 
 	public function __destruct() {

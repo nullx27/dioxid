@@ -21,7 +21,10 @@ interface InterfaceEngine {
 
     public function show();
 
+    public function handleHelper($name, $instance);
+
     public function finally();
+
 }
 
 ?>

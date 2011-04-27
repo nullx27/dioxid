@@ -108,6 +108,9 @@ abstract class Controller extends Base {
 				((@static::$baseUrl['query']) ? '?' .@static::$baseUrl['query'] : "");
 	}
 
+	public static function __getFullRequest(){
+		return static::$baseUrl;
+	}
 
 	protected static function getView(){
 		return View::getInstance();

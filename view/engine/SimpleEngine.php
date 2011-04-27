@@ -43,6 +43,8 @@ class SimpleEngine extends Base implements InterfaceEngine {
 
     protected $_layout = false;
 
+    protected $_helper = array();
+
     /**
      * Class Constructor
      * Tries to load the template from the template folder
@@ -107,8 +109,6 @@ class SimpleEngine extends Base implements InterfaceEngine {
         	throw new TemplateNotFoundException("$template not found");
         }
     }
-
-
 
     /**
      * Method: process
@@ -210,6 +210,16 @@ class SimpleEngine extends Base implements InterfaceEngine {
 		} else {
 			throw new TemplateNotFoundException("Layout not found in $path");
 		}
+    }
+
+    public function handleHelper($name, $instance){
+		$this->_helper[$name] = $instance;
+    }
+
+    //TODO: Add Sendboxcode here
+    public function __get($key){
+		if(array_key_exists($key, $this->_helper))
+    		return $this->_helper[$key];
     }
 
     /**
