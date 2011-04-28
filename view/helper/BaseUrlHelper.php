@@ -35,6 +35,11 @@ class BaseUrlHelper {
 	public function changeProtocol($proto){
 		return $proto . '://' . $this->baseUrl['host'];
 	}
+
+	public function __toString(){
+		return $this->base();
+
+	}
 }
 
 ?>
