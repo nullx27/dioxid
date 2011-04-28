@@ -15,6 +15,7 @@ use Exception;
 use dioxid\lib\Base;
 use dioxid\config\Config;
 use dioxid\view\InterfaceEngine;
+use dioxid\view\engine\simpleEngine\ContextSandbox;
 
 use dioxid\error\exception\TemplateNotFoundException;
 
@@ -24,7 +25,7 @@ class SimpleEngine extends Base implements InterfaceEngine {
 	 * Fullpath to the template
 	 * @var mixed
 	 */
-    protected $_file = false;
+    protected $_template = false;
 
     /**
      * The process template
@@ -104,7 +105,7 @@ class SimpleEngine extends Base implements InterfaceEngine {
         }
 
         if(file_exists($fqtp)){
-        	$this->_file = $fqtp;
+        	$this->_template = $fqtp;
         } else {
         	throw new TemplateNotFoundException("$template not found");
         }
@@ -116,32 +117,19 @@ class SimpleEngine extends Base implements InterfaceEngine {
      * @throws TemplateNotFoundException
      */
     public function process(){
-		if(!$this->_file) throw new TemplateNotFoundException('No template loaded!');
-		$__layout = false;
+		if(!$this->_template) throw new TemplateNotFoundException('No template loaded!');
 
-    	extract($this->_vars);
-		try {
-			if($this->_layout){
-				ob_start();
-				@include $this->_layout;
-				$__layout = ob_get_contents();
-				ob_end_clean();
-			}
+		$layout = ($this->_layout) ? new ContextSandbox(
+			$this->_layout, $this->_vars, &$this->_helper) : false;
+		$content = new ContextSandbox(
+			$this->_template, $this->_vars, &$this->_helper);
 
-			ob_start();
-			@include($this->_file);
-			$__content = ob_get_contents();
-			ob_end_clean();
-		} catch (Exception $e) {
-			throw new TemplateNotFoundException($e->getMessage());
-		}
-
-		if($__layout) {
-			$this->_output = str_replace(Config::getVal('view', 'content_variable', true), $__content, $__layout);
+		if($layout) {
+			$this->_output = str_replace(
+				Config::getVal('view', 'content_variable', true), $content, $layout);
 			return ;
 		}
-
-		$this->_output = $__content;
+		$this->_output = $content;
     }
 
 
@@ -224,11 +212,10 @@ class SimpleEngine extends Base implements InterfaceEngine {
 
     /**
      * Method: finally
-     * Gets called in the destructor of the View Object
      * Calls the process and show function of this class
      */
     public function finally(){
-    	if(!$this->_file){
+    	if(!$this->_template){
     		print "No file loaded when __destruct was called";
     	}
     	try {
