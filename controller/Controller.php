@@ -92,13 +92,16 @@ abstract class Controller extends Base {
 		static::$baseUrl = $url_arr;
 	}
 
+
 	public static function _getBaseUrl(){
 		return static::$baseUrl['scheme'] . '://' . static::$baseUrl['host'];
 	}
 
+
 	public static function _getBaseUrlPath(){
 		return static::$baseUrl['path'];
 	}
+
 
 	public static function _getFullUrl(){
 		return static::$baseUrl['scheme'] . '://' .
@@ -108,9 +111,11 @@ abstract class Controller extends Base {
 				((@static::$baseUrl['query']) ? '?' .@static::$baseUrl['query'] : "");
 	}
 
+
 	public static function __getFullRequest(){
 		return static::$baseUrl;
 	}
+
 
 	protected static function getView(){
 		return View::getInstance();

@@ -17,10 +17,13 @@ class ContextSandbox {
 	protected $__output = false;
 
 	public function __construct($__path, $__context, $__helper){
+
 		$this->helper = $__helper;
-		unset($__helper);
 		extract($__context);
+
 		unset($__context);
+		unset($__helper);
+
 		try {
 			ob_start();
 			@include($__path);
