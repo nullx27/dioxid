@@ -91,7 +91,7 @@ class ErrorHandler {
 	 * @param unknown_type $exception
 	 */
 	public static function exceptionHandler($exception){
-		static::handleError($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTrace());
+		static::handleError($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine(), get_class($exception), $exception->getTrace());
 	}
 
 	/**
@@ -113,7 +113,7 @@ class ErrorHandler {
 	 * @param int $line
 	 * @param array $trace
 	 */
-	public static function handleError($errno, $msg, $file, $line, $trace=null){
+	public static function handleError($errno, $msg, $file, $line, $name=null, $trace=null){
 		if($errno == 0) $errno = 500;
 		static::errorHeader($errno);
 
@@ -131,7 +131,7 @@ class ErrorHandler {
 			@include 'static/error_debug.html';
 			$out = ob_get_contents();
 			ob_end_clean();
-			die(strtr($out, array('$msg' => $msg, '$file' => $file, '$line' => $line, '$stactrace' => $stacktrace )));
+			die(strtr($out, array('$msg' => $msg, '$file' => $file, '$line' => $line, '$stactrace' => $stacktrace, '$name' => $name )));
 		}
 	}
 
