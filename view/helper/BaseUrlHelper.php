@@ -9,6 +9,7 @@
 namespace dioxid\view\helper;
 
 use dioxid\lib\Base;
+use dioxid\config\Config;
 
 class BaseUrlHelper {
 
@@ -24,7 +25,8 @@ class BaseUrlHelper {
 	}
 
 	public function base(){
-		return $this->baseUrl['scheme'] . '://' . $this->baseUrl['host'];
+		return $this->baseUrl['scheme'] . '://' . $this->baseUrl['host'] .
+		 	DIRECTORY_SEPARATOR . Config::getVal('misc', 'dispatcher_limit');
 	}
 
 	public function add($path){
@@ -39,6 +41,7 @@ class BaseUrlHelper {
 		return $this->base();
 
 	}
+
 }
 
 ?>

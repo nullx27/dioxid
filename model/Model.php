@@ -9,44 +9,39 @@
 
 namespace  dioxid\model;
 
+use dioxid\error\exception\EngineNotFoundException;
+
 use dioxid\config\Config;
-use dioxid\lib\Base;
-use Exception;
-use PDO;
 
-abstract class Model extends Base {
+class Model {
 
-    protected static $pdo = false;
+	private static $_engine;
+	protected static $db;
 
-    public function __construct() {
-        static::createPdo();
-    }
+	protected static $_name=false;
+	protected static $_driver=false;
 
-    protected static function createPdo(){
-         $dsn     = Config::getVal('database', 'driver') .
-                   ':host=' . Config::getVal('database', 'host') .
-                   ';port=' . Config::getVal('database', 'port') .
-                   ';dbname=' . Config::getVal('database', 'database');
 
-        try {
-            static::$pdo = new PDO($dsn, Config::getVal('database', 'user'), Config::getVal('database', 'password'), array());
-        } catch (Exception $e) {
-            print $e->getMessage();
-            return false;
-        }
-    }
+	final public function __construct() {
 
-    public static function __callStatic ( $name, $args ) {
-        $callback = array ( static::$pdo, $name ) ;
-        return call_user_func_array ( $callback , $args ) ;
-    }
-
-    public static function factory($backend=Null){
-		if(!$backend){
-			$backend = Config::getVal('database', 'driver');
+		if(!static::$_driver){
+			$class = 'dioxid\\model\\engine\\'. Config::getVal('database', 'driver', true) . 'Engine';
+		} else {
+			$class = 'dioxid\\model\\engine\\'. static::$_driver . 'Engine';
 		}
-    }
-}
 
+		if(class_exists($class)){
+			static::$db = call_user_func_array(array($class, 'getInstance'), array(static::$_name));
+		}
+		else {
+			throw new EngineNotFoundException($class . ' not found');
+		}
+
+		static::_init();
+	}
+
+	public static function _init(){}
+
+}
 
 ?>
