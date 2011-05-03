@@ -141,6 +141,10 @@ class SimpleEngine extends Base implements InterfaceEngine {
 		$this->_disallow_output = true;
     }
 
+    public function disableLayout(){
+    	$this->_layout =false;
+    }
+
     /**
      * Method: getOutput
      * Procresses the template if its not procressed and returns the output

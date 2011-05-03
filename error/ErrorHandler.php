@@ -8,6 +8,8 @@
 
 namespace dioxid\error;
 
+use dioxid\error\exception\TemplateNotFoundException;
+
 use dioxid\lib\Base;
 use dioxid\config\Config;
 
@@ -31,6 +33,8 @@ class ErrorHandler {
 	 * @var int
 	 */
 	private static $error_level;
+
+	private static $custom404 = false;
 
 	/**
 	 * Method: _init
@@ -117,9 +121,10 @@ class ErrorHandler {
 		if($errno == 0) $errno = 500;
 		static::errorHeader($errno);
 
+		$errorpage = ($errno == 404 && static::$custom404) ? static::$custom404 : 'static/error.html';
 		if(static::$debug){
 			ob_start();
-			@include 'static/error.html';
+			@include $errorpage;
 			$out = ob_get_contents();
 			ob_end_clean();
 			die($out);
@@ -155,8 +160,18 @@ class ErrorHandler {
 		return $out;
 	}
 
+
+	public static function registerCustom404 ($path){
+		if(file_exists(Config::getVal('path', 'app_path')) . $path) {
+			static::$custom404 = Config::getVal('path', 'app_path') . DIRECTORY_SEPARATOR
+				. Config::getVal('path', 'template_path'). DIRECTORY_SEPARATOR .$path;
+
+		} else {
+			throw new TemplateNotFoundException('Errorpage not found at ' . $path);
+		}
+
+	}
 }
 
-//TODO: Custom error/404 Pages for each application
 
 ?>

@@ -21,7 +21,6 @@ class BaseUrlHelper {
 		if(is_subclass_of($class, 'dioxid\controller\Controller')){
 			$this->baseUrl = $class::__getFullRequest();
 		}
-
 	}
 
 	public function base(){
@@ -29,7 +28,7 @@ class BaseUrlHelper {
 	}
 
 	public function add($path){
-		return $this->base() . trim($path, "/");
+		return $this->base() . '/' .  trim($path, "/");
 	}
 
 	public function changeProtocol($proto){
