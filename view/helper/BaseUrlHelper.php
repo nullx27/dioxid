@@ -26,8 +26,9 @@ class BaseUrlHelper {
 
 	public function base(){
 		return $this->baseUrl['scheme'] . '://' . $this->baseUrl['host'] .
-			(@$this->baseUrl['port'])? ":".$this->baseUrl['port'] :"".
-		 	DIRECTORY_SEPARATOR . Config::getVal('misc', 'dispatcher_limit');
+			(@$this->baseUrl['port'])? ":".$this->baseUrl['port'] :"" .
+			(Config::getVal('misc', 'dispatcher_limit') !=0) ?
+		 	DIRECTORY_SEPARATOR . Config::getVal('misc', 'dispatcher_limit'):"";
 	}
 
 	public function add($path){

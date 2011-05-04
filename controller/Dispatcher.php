@@ -62,7 +62,7 @@ class Dispatcher {
 	    	$request = $req_url['path'];
 	    }
 
-	    ltrim($request, '/');
+	    $request = ltrim($request, '/');
 
 
 		$chunks = explode('/',$request);
