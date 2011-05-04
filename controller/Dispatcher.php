@@ -55,15 +55,14 @@ class Dispatcher {
 
 		// If theres no dispatcher limit dont replace anything
 	    if(Config::getVal('misc', 'dispatcher_limit') != "" ||
-	    	Config::getVal('misc', 'dispatcher_limit') != 0)
+	    	Config::getVal('misc', 'dispatcher_limit') != 0) {
 		    $request = str_replace(Config::getVal('misc', 'dispatcher_limit', true), '',
 		    	$req_url['path']);
+	    } else {
+	    	$request = $req_url['path'];
+	    }
 
-		// If the first thign in the $request is a / remove it, so it cant
-		// cause later any problems
-		if(substr($request, 0,1) == "/") {
-		    $request = substr($request, 1);
-		}
+	    ltrim($request, '/');
 
 		$chunks = explode('/',$request);
 
