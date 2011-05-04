@@ -21,7 +21,8 @@ class BaseUrlHelper {
 		$class = $caller['class'];
 		if(is_subclass_of($class, 'dioxid\controller\Controller')){
 			$this->baseUrl = $class::__getFullRequest();
-		}
+        }
+        print_r($this->baseUrl);
 	}
 
 	public function base(){
