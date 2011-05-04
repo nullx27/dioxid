@@ -54,7 +54,8 @@ class Dispatcher {
 
 
 		// If theres no dispatcher limit dont replace anything
-	    if(Config::getVal('misc', 'dispatcher_limit') != "")
+	    if(Config::getVal('misc', 'dispatcher_limit') != "" ||
+	    	Config::getVal('misc', 'dispatcher_limit') != 0)
 		    $request = str_replace(Config::getVal('misc', 'dispatcher_limit', true), '',
 		    	$req_url['path']);
 
