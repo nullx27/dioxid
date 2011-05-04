@@ -62,10 +62,11 @@ class Dispatcher {
 	    	$request = $req_url['path'];
 	    }
 
-	    ltrim($request, '/');
+        $request = ltrim($request, '/');
+        print_r($request);
 
 		$chunks = explode('/',$request);
-
+        print_r($chunks);
 		// Parse the GET Params
 		$GET = array();
 		$param = array();
@@ -111,7 +112,7 @@ class Dispatcher {
 		    return;
 		}
 
-		$class = Config::getVal('misc', 'controller_namespace', true) . $chunks[0];
+		$class = Config::getVal('misc', 'controller_namespace', true) . ucfirst($chunks[0]);
 
 		// This fixes a weired bug where it tries to load a namespace without controller
 		if(substr($class, -1) == "\\") return;
