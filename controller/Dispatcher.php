@@ -45,7 +45,7 @@ class Dispatcher {
 
 		// Build the reuqest URL
 		// taken and modified from http://stackoverflow.com/questions/5216172/getting-current-url
-		$req_url = ($_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+		$req_url = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
 		$req_url .= $_SERVER["SERVER_NAME"] .
 			(($_SERVER["SERVER_PORT"] != "80") ? ":". $_SERVER["SERVER_PORT"] : "");
 		$req_url .= $_SERVER["REQUEST_URI"];
@@ -112,7 +112,7 @@ class Dispatcher {
 		    return;
 		}
 
-		$class = Config::getVal('misc', 'controller_namespace', true) . ucfirst($chunks[0]);
+		$class = Config::getVal('misc', 'controller_namespace', true) . $chunks[0];
 
 		// This fixes a weired bug where it tries to load a namespace without controller
 		if(substr($class, -1) == "\\") return;
