@@ -6,7 +6,7 @@
  * @package package_name
  */
 
-namespace dixoid\model\engine;
+namespace dioxid\model\engine;
 
 use PDO;
 use Exception;
@@ -17,22 +17,23 @@ use dioxid\model\InterfaceEngine;
 
 abstract class PDOEngine extends Base implements InterfaceEngine {
 
-	protected static $connection;
+	protected static $pdo;
 
-	abstract public static function _init($dsn) {
+	public static function _init($dsn, $options=array()) {
 
 		try {
-            static::$pdo = new PDO($dsn, Config::getVal('database', 'user'), Config::getVal('database', 'password'), array());
+            static::$pdo = new PDO($dsn, Config::getVal('database', 'user'), Config::getVal('database', 'password'), $options);
         } catch (Exception $e) {
             print $e->getMessage();
             return false;
         }
 	}
 
-	abstract public function __callstatic($name, $args){
-		$callback = array ( static::$connection, $name ) ;
+	public function __call($name, $args){
+		$callback = array ( static::$pdo, $name ) ;
         return call_user_func_array ( $callback , $args ) ;
 	}
+
 }
 
 ?>

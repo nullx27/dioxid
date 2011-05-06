@@ -11,11 +11,11 @@ namespace  dioxid\model;
 
 use dioxid\error\exception\EngineNotFoundException;
 
+use Exception;
 use dioxid\config\Config;
 
 class Model {
 
-	private static $_engine;
 	protected static $db;
 
 	protected static $_name=false;
@@ -31,7 +31,7 @@ class Model {
 		}
 
 		if(class_exists($class)){
-			static::$db = call_user_func_array(array($class, 'getInstance'), array(static::$_name));
+			static::$db = call_user_func_array(array($class, 'getInstance'), array($this->_name));
 		}
 		else {
 			throw new EngineNotFoundException($class . ' not found');
@@ -41,6 +41,12 @@ class Model {
 	}
 
 	public static function _init(){}
+
+	public function __call($method, $args){
+		if(!method_exists(static::$db, $method))
+			throw new Exception();
+		call_user_func_array(array(static::$db, $method), $args);
+	}
 
 }
 
