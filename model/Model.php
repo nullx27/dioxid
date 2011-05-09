@@ -13,6 +13,7 @@ use dioxid\error\exception\EngineNotFoundException;
 
 use Exception;
 use dioxid\config\Config;
+use dioxid\model\query\Query;
 
 class Model {
 
@@ -20,7 +21,6 @@ class Model {
 
 	protected static $_name=false;
 	protected static $_driver=false;
-
 
 	final public function __construct() {
 
@@ -46,6 +46,10 @@ class Model {
 		if(!method_exists(static::$db, $method))
 			throw new Exception();
 		call_user_func_array(array(static::$db, $method), $args);
+	}
+
+	protected static function query(){
+		return new Query(static::$_name, &static::$db);
 	}
 
 }

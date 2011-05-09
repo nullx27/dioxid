@@ -25,6 +25,7 @@ class MySQLEngine extends PDOEngine {
 
 		parent::_init($dsn, $options);
 	}
+
 }
 
 ?>
