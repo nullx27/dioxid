@@ -39,6 +39,7 @@ class Query {
 
     const TYPE = 'type';
     const BIND = 'bind';
+    const TABLES = 'tables';
 
     const SELECT = 'select';
     const UPDATE = 'update';
@@ -107,7 +108,7 @@ class Query {
 
 	private $_querystack_update_init = array(
 			self::TYPE => self::UPDATE,
-			self::COLUMNS => array(),
+			self::TABLES => array(),
 			self::JOIN => array(),
 			self::SET => array(),
 			self::WHERE => array(),
@@ -171,24 +172,69 @@ class Query {
 		return $this;
 	}
 
-	public function update() {
+
+	/**
+	 * Method: update
+	 * format: array('table' => 'new value')
+	 * @param array $set
+	 * @throws Exception
+	 */
+	public function update(array $set) {
 		if($this->_querystack)
 			throw new Exception();
 
 		$this->_querystack = $this->_querystack_update_init;
+		$this->_querystack[self::TABLES][] = $this->_tname;
+
+		foreach ($set as $col => $v) {
+			$this->_querystack[self::SET][][$col] = $v;
+		}
+
 
 		return $this;
 	}
 
-	public function columns($cols){
+	public function set(array $set){
+		foreach ($set as $col => $v) {
+			$this->_querystack[self::SET][][$col] = $v;
+		}
 
+
+		return $this;
+	}
+
+	public function columns(array $columns){
+		if(!array_key_exists(self::COLUMNS, $this->_querystack))
+			throw new Exception();
+		$this->_querystack[self::COLUMNS] =
+			array_merge($this->_querystack[self::COLUMNS], $columns);
+
+		return $this;
+	}
+
+	public function addTable($table){
+		if(!array_key_exists(self::TABLES, $this->_querystack))
+			throw new Exception('Cant use addTable here!');
+
+		if(preg_match('/^(.+)\s+[A|a][S|s]\s+(.+)$/i', $table, $m)) {
+            $this->_querystack[self::TABLES][] = array($m[1]=>$m[2]);
+		} else {
+			$this->_querystack[self::TABLES][] = $table;
+		}
+
+		return $this;
 	}
 
 	public function insert($what){
 		if($this->_querystack)
 			throw new Exception();
 
-		$this->_querystack[self::INTO] = $this->_tname;
+		$this->_querystack[self::INTO][] = $this->_tname;
+
+		foreach ($what as $col => $val){
+			$this->_querystack[self::COLUMNS][] = $col;
+			$this->_querystack[self::VALUES][] = $val;
+		}
 
 		return $this;
 	}
@@ -586,14 +632,135 @@ class Query {
 
 		//UPDATE
 		$this->_add($sql, self::SQL_UPDATE);
-		#$this->_add($sql, )
+
+		//Tables
+		foreach ($this->_querystack[self::TABLES] as $tables){
+			$table = array();
+
+			if(is_array($tables)){
+				foreach ($tables as $col => $alias)
+					$table[] =  $col . ' ' . self::SQL_AS . ' ' . $alias;
+			} else {
+				$table[] = $tables;
+			}
+		};
+		$this->_add($sql, $table);
+
+		//COLUMNS
+		$this->_add($sql, $this->_querystack[self::COLUMNS], '', ',');
+
+		//SET
+		$this->_add($sql, self::SQL_SET);
+		$set = array();
+		foreach ($this->_querystack[self::SET] as $counter => $set){
+			foreach ($set as $col => $val){
+				$set[] = $col. '=' . $this->escpae($val);
+			}
+		}
+		$this->_add($sql, $set, '', ' ,');
+
+
+		//WHERE
+		if(count($this->_querystack[self::WHERE]) > 0){
+			$w = "";
+			$this->_add($sql, self::SQL_WHERE);
+			foreach ($this->_querystack[self::WHERE] as $counter => $where){
+				foreach ($where as $type => $cond){
+					if($counter != 0)
+						$this->_add($sql, $type);
+					$this->_add($sql, "(".$cond.")");
+				}
+			}
+		}
+
+
 	}
 
 	private function _assembleInsert(){
+		$sql = "";
+
+		//INSERT
+		$this->_add($sql, self::SQL_INSERT);
+
+		//INTO
+		foreach ($this->_querystack[self::INTO] as $tables){
+			$table = array();
+
+			if(is_array($tables)){
+				foreach ($tables as $col => $alias)
+					$table[] =  $col . ' ' . self::SQL_AS . ' ' . $alias;
+			} else {
+				$table[] = $tables;
+			}
+		};
+		$this->_add($sql, $table);
+
+		//Columns
+		$this->_add($sql, '(');
+		$this->_add($sql, $this->_querystack[self::COLUMNS], '', ',');
+		$this->_add($sql, ')');
+
+		//VALUES
+		$this->_add($sql, self::SQL_VALUES);
+		$this->_add($sql, '(');
+		$this->_add($sql, $this->_querystack[self::VALUES], '', ',');
+		$this->_add($sql, ')');
 
 	}
 
 	private function _assembleDelete(){
+		$sql = "";
+
+		//DELETE
+		$this->_add($sql, self::SQL_DELETE);
+
+		//FROM
+		$this->_add($sql, self::SQL_FROM);
+		foreach ($this->_querystack[self::FROM] as $column){
+			$from = array();
+
+			if(is_array($column)){
+				foreach ($column as $col => $alias)
+					$from[] =  $col . ' ' . self::SQL_AS . ' ' . $alias;
+			} else {
+				$from[] = $column;
+			}
+		};
+		$this->_add($sql, $from);
+
+
+		//JOIN
+		if(count($this->_querystack[self::JOIN]) > 0) {
+			foreach ($this->_querystack[self::JOIN] as $counter => $join){
+				$this->_add($sql, $join['type']);
+				$this->_add($sql, $join['table']);
+
+				if($join['alias']) {
+					$this->_add($sql, self::SQL_AS);
+					$this->_add($sql, $join['alias']);
+				}
+
+				$this->_add($sql, self::SQL_ON);
+				$this->_add($sql, $join['condition']);
+			}
+		}
+
+		//WHERE
+		if(count($this->_querystack[self::WHERE]) > 0){
+			$w = "";
+			$this->_add($sql, self::SQL_WHERE);
+			foreach ($this->_querystack[self::WHERE] as $counter => $where){
+				foreach ($where as $type => $cond){
+					if($counter != 0)
+						$this->_add($sql, $type);
+					$this->_add($sql, "(".$cond.")");
+				}
+			}
+		}
+
+
+		//todo:USING
+
 
 	}
 
@@ -604,11 +771,7 @@ class Query {
 
 		$sql .= " " . $prefix . $what . $postfix;
 
-		if($trim) {
-			$sql = trim($sql);
-			$sql = trim($sql, $prefix);
-			$sql = trim($sql, $postfix);
-		}
+		if($trim) $sql = trim(trim(trim($sql, $postfix), $prefix));
 	}
 
 
