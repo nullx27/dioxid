@@ -11,6 +11,7 @@ namespace dioxid\model\query;
 use dioxid\error\exception\CouldNotWriteToCacheException;
 
 use PDO;
+use PDOException;
 use Exception;
 
 class Query {
@@ -166,7 +167,9 @@ class Query {
 		if($what){
 			if(!is_array($what))
 				$what = array($what);
-			$this->_querystack[self::COLUMNS][] = $what;
+
+			$this->_querystack[self::COLUMNS] = array_merge(
+				$this->_querystack[self::COLUMNS], $what);
 		}
 
 		return $this;
@@ -186,9 +189,8 @@ class Query {
 		$this->_querystack = $this->_querystack_update_init;
 		$this->_querystack[self::TABLES][] = $this->_tname;
 
-		foreach ($set as $col => $v) {
-			$this->_querystack[self::SET][][$col] = $v;
-		}
+		$this->_querystack[self::SET] = array_merge(
+				$this->_querystack[self::SET], $set);
 
 
 		return $this;
@@ -229,6 +231,8 @@ class Query {
 		if($this->_querystack)
 			throw new Exception();
 
+		$this->_querystack = $this->_querystack_insert_init;
+
 		$this->_querystack[self::INTO][] = $this->_tname;
 
 		foreach ($what as $col => $val){
@@ -239,7 +243,7 @@ class Query {
 		return $this;
 	}
 
-	public function delete($what){
+	public function delete(){
 		if($this->_querystack)
 			throw new Exception();
 
@@ -413,6 +417,7 @@ class Query {
 	 */
 	public function bind(array $vars){
 		$this->_querystack[self::BIND][] = $vars;
+		return $this;
 	}
 
 // ************************************************************************** //
@@ -425,7 +430,7 @@ class Query {
 		if(count($this->_querystack[self::BIND]) > 0){
 			foreach($this->_querystack[self::BIND] as $items){
 				foreach($items as $bind => $param){
-					$stmt->bindParam($bind, $param);
+					$stmt->bindValue($bind, $param);
 				}
 			}
 		}
@@ -434,21 +439,32 @@ class Query {
 			$stmt->execute();
 		$this->_endQuery();
 		$time = $this->querytime();
+
+
 		$stmt->setFetchMode (PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
-									"dioxid\\model\\query\\Result", array($stmt->queryString, $time));
-		return $stmt->fetch();
+									"dioxid\\model\\query\\Result",
+										array($stmt->queryString, $time));
+
+		$ret = $stmt->fetch();
+
+		if($ret === NULL){
+			return FALSE;
+		}
+		return $ret;
 	}
 
 
 	public function exec(){
 		$query = $this->_assemble();
 
+
+
 		$stmt = $this->_adapter->prepare($query);
 
 		if(count($this->_querystack[self::BIND]) > 0){
 			foreach($this->_querystack[self::BIND] as $items){
 				foreach($items as $bind => $param){
-					$stmt->bindParam($bind, $param);
+					$stmt->bindValue($bind, $param);
 				}
 			}
 		}
@@ -457,9 +473,10 @@ class Query {
 		$stmt->execute();
 		$this->_endQuery();
 
+
+
 		if($this->_querystack[self::TYPE] == self::INSERT)
 			return $this->_adapter->lastInsertId();
-
 	}
 
 	public function querytime(){
@@ -467,7 +484,6 @@ class Query {
 		if(!$this->_querytime)
 			$this->_querytime = $this->_querytime_end - $this->_querytime_start;
 		return $this->_querytime;
-
 	}
 
 	public function _type(){
@@ -501,13 +517,13 @@ class Query {
 				return $this->_assembleSelect();
 				break;
 			case self::UPDATE:
-				$query = $this->_assembleUpdate();
+				return $this->_assembleUpdate();
 				break;
 			case self::INSERT:
-				$query = $this->_assembleInsert();
+				return $this->_assembleInsert();
 				break;
 			case self::DELETE:
-				$query = $this->_assembleDelete();
+				return $this->_assembleDelete();
 				break;
 			default:
 				throw new Exception("Unkown Type");
@@ -623,8 +639,8 @@ class Query {
 				$this->_add($sql, $union);
 			}
 		}
-
 		return $sql;
+
 	}
 
 	private function _assembleUpdate(){
@@ -652,12 +668,13 @@ class Query {
 		//SET
 		$this->_add($sql, self::SQL_SET);
 		$set = array();
-		foreach ($this->_querystack[self::SET] as $counter => $set){
-			foreach ($set as $col => $val){
-				$set[] = $col. '=' . $this->escpae($val);
-			}
+
+		foreach ($this->_querystack[self::SET] as $col => $val){
+			$set[] = $col. '=' . $this->escpae($val);
 		}
+
 		$this->_add($sql, $set, '', ' ,');
+
 
 
 		//WHERE
@@ -672,8 +689,7 @@ class Query {
 				}
 			}
 		}
-
-
+		return $sql;
 	}
 
 	private function _assembleInsert(){
@@ -706,6 +722,7 @@ class Query {
 		$this->_add($sql, $this->_querystack[self::VALUES], '', ',');
 		$this->_add($sql, ')');
 
+		return $sql;
 	}
 
 	private function _assembleDelete(){
@@ -758,10 +775,9 @@ class Query {
 			}
 		}
 
-
 		//todo:USING
 
-
+		return $sql;
 	}
 
 	private function _add(&$sql, $what, $prefix='', $postfix='', $trim=true){
@@ -770,6 +786,7 @@ class Query {
 		}
 
 		$sql .= " " . $prefix . $what . $postfix;
+
 
 		if($trim) $sql = trim(trim(trim($sql, $postfix), $prefix));
 	}
