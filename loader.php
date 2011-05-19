@@ -49,8 +49,8 @@ class Loader {
             	str_replace('\\', DIRECTORY_SEPARATOR,
             	substr($namespace, strlen($chunks[0]) + 1)) . '.php';
 
-            if(!file_exists($path))
-            	throw new NotFoundException('Class "'.$namespace.'" not found.');
+            #if(!file_exists($path))
+            #	throw new NotFoundException('Class "'.$namespace.'" not found.');
 
             try {
                 require_once($path);

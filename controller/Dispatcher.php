@@ -62,11 +62,14 @@ class Dispatcher {
 	    	$request = $req_url['path'];
 	    }
 
+<<<<<<< HEAD
+        $request = ltrim($request, '/');
+=======
 	    $request = ltrim($request, '/');
 
+>>>>>>> 35006c64d341da39a0acd4e835851d61abe92453
 
 		$chunks = explode('/',$request);
-
 		// Parse the GET Params
 		$GET = array();
 		$param = array();
