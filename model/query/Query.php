@@ -54,7 +54,7 @@ class Query {
 	const SQL_DELETE = 'DELETE';
 	const SQL_UNION = 'UNION';
 
-	const SQL_DISINCT = 'DISINCT';
+	const SQL_DISINCT = 'DISTINCT';
 
 	const SQL_WILDCARD = '*';
 
@@ -424,7 +424,6 @@ class Query {
 
 	public function fetch(){
 		$query = $this->_assemble();
-
 		$stmt = $this->_adapter->prepare($query);
 
 		if(count($this->_querystack[self::BIND]) > 0){
@@ -444,7 +443,6 @@ class Query {
 		$stmt->setFetchMode (PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
 									"dioxid\\model\\query\\Result",
 										array($stmt->queryString, $time));
-
 		$ret = $stmt->fetch();
 
 		if($ret === NULL){
@@ -453,11 +451,8 @@ class Query {
 		return $ret;
 	}
 
-
 	public function exec(){
 		$query = $this->_assemble();
-
-
 
 		$stmt = $this->_adapter->prepare($query);
 
@@ -473,14 +468,11 @@ class Query {
 		$stmt->execute();
 		$this->_endQuery();
 
-
-
 		if($this->_querystack[self::TYPE] == self::INSERT)
 			return $this->_adapter->lastInsertId();
 	}
 
 	public function querytime(){
-
 		if(!$this->_querytime)
 			$this->_querytime = $this->_querytime_end - $this->_querytime_start;
 		return $this->_querytime;
@@ -531,16 +523,15 @@ class Query {
 		}
 	}
 
-
 	private function _assembleSelect(){
 		$sql = "";
+
+		//SELECT
+		$this->_add($sql, self::SQL_SELECT);
 
 		//Distinct?
 		if($this->_querystack[self::DISTINCT])
 			$this->_add($sql, self::SQL_DISINCT);
-
-		//SELECT
-		$this->_add($sql, self::SQL_SELECT);
 
 		//Columns
 		if(count($this->_querystack[self::COLUMNS]) > 0 ){
