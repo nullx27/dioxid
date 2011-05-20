@@ -16,13 +16,15 @@ class Result {
 
 	protected $_result;
 
-	public function __construct($query, $time){
+	public function __construct($query, $time, $result){
 		$this->_query = $query;
 		$this->_querytime = $time;
-	}
 
-	public function __set($col, $value){
-		$this->_result[$col] = $value;
+		foreach ($result as $item ){
+			foreach ($item as $key => $value){
+				$this->_result[$key][] = $value;
+			}
+		}
 	}
 
 	public function __get($key){

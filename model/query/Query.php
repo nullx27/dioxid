@@ -437,18 +437,14 @@ class Query {
 		$this->_startQuery();
 			$stmt->execute();
 		$this->_endQuery();
-		$time = $this->querytime();
 
-
-		$stmt->setFetchMode (PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
-									"dioxid\\model\\query\\Result",
-										array($stmt->queryString, $time));
-		$ret = $stmt->fetch();
+		$ret = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if($ret === NULL){
 			return FALSE;
 		}
-		return $ret;
+
+		return new Result($query, $this->querytime(), $ret);
 	}
 
 	public function exec(){
