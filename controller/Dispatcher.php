@@ -31,9 +31,25 @@ use dioxid\config\Config;
  */
 class Dispatcher {
 
+	/**
+	 * Is a coustom index set? If so this is an array.
+	 * @var bool | array
+	 * @staticvar
+	 */
 	static protected $customIndex = false;
+
+	/**
+	 * Array containing the custom set static routs
+	 * @var array
+	 * @staticvar
+	 */
 	static protected $staticRoutes = array();
 
+	/**
+	 * Contains the Called URL
+	 * @var string
+	 * @staticvar
+	 */
 	static protected $calledUrl = "";
 
 	/**
@@ -172,10 +188,27 @@ class Dispatcher {
 		}
 	}
 
+	/**
+	 * Method: registerIndex
+	 * Sets an Controller and an Action which is called when no Controller
+	 * and Action is provided in the url
+	 *
+	 * @param string $controller
+	 * @param string $action
+	 */
 	public static function registerIndex($controller, $action){
 		static::$customIndex = array('class' => $controller, 'method' => $action);
 	}
 
+	/**
+	 * Method: addRoute
+	 * Lets you set a Controller and an Action which gets called when your
+	 * rout was requested. You can use * as a wildcard for variables.
+	 *
+	 * @param string $route
+	 * @param string $controller
+	 * @param string $action
+	 */
 	public static function addRoute($route, $controller, $action){
 		static::$staticRoutes[] = array('route'  => $route,
 										'class'  => $controller,
