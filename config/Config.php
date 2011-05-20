@@ -97,7 +97,8 @@ class Config {
 			return static::$config[$section][$val];
 		}
 
-		if($required) throw new RequiredValNotFoundException("Required Val \"$val\" not found in $section");
+		if($required) throw new RequiredValNotFoundException(
+								"Required Val \"$val\" not found in $section");
 
 		return false;
 	}
@@ -115,6 +116,16 @@ class Config {
 	}
 
 
+	/**
+	 * Method: setVal
+	 * Set a temporary Value in the config
+	 *
+	 * @param string $section Which section of the config?
+	 * @param string $key
+	 * @param string $value
+	 * @param bool $override should an already existant value be overwritten?
+	 * @throws ConfigValueAlreadyExistsException
+	 */
 	public static function setVal($section, $key, $value, $override=false){
 		if(!$override && @key_exists($key, static::$config[$section]))
 			throw new ConfigValueAlreadyExistsException();
@@ -122,13 +133,33 @@ class Config {
 		static::$config[$section][$key] = $value;
 	}
 
+	/**
+	 * Method: setValPermanent
+	 * Set a permantent Value in the config
+	 *
+	 * @param string $section Which section of the config?
+	 * @param string $key
+	 * @param string $value
+	 * @param bool $override should an already existant value be overwritten?
+	 * @throws ConfigValueAlreadyExistsException
+	 */
 	public static function setValPermanent($section, $key, $value, $override=false) {
+		if(!$override && @key_exists($key, static::$config[$section]))
+			throw new ConfigValueAlreadyExistsException();
+
 		static::setVal($section, $key, $value, $override);
 		static::write_config(static::$config);
 	}
-
-
-	//taken and modified from: http://stackoverflow.com/questions/1268378/create-ini-file-write-values-in-php
+	/**
+	 * Method: write_config
+	 * Writes the internal Config regestry into an INI-file
+	 *
+	 * taken and modified from:
+	 * http://stackoverflow.com/questions/1268378/create-ini-file-write-values-in-php
+	 *
+	 * @param unknown_type $assoc_arr
+	 * @throws CantAccessConfigFileException
+	 */
 	protected static function write_config($assoc_arr){
 	    $content = "";
 
@@ -144,6 +175,8 @@ class Config {
 				}
 
 				else if($elem2=="") $content .= $key2." = \n";
+				elseif(is_int($elem2) || is_float($elem2) || is_numeric($elem2))
+					$content .= $key2 . "=" . $elem2;
                 else $content .= $key2." = \"".$elem2."\"\n";
 			}
 			$content .= "\n";
