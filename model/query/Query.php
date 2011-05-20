@@ -8,17 +8,40 @@
 
 namespace dioxid\model\query;
 
-use dioxid\error\exception\CouldNotWriteToCacheException;
-
 use PDO;
 use PDOException;
 use Exception;
 
+
+use dioxid\model\query\Result;
+use dioxid\model\query\Query;
+use dioxid\error\exception\CouldNotWriteToCacheException;
+
+
+/**
+ * dioxid\model\query$Query
+ *
+ * Gernerall porpose SQL Abstraction Class.
+ *
+ * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
+ * @date 20.05.2011 17:01:29
+ *
+ */
 class Query {
 
+
+	/**
+	 * The Databasetable name
+	 * @var string
+	 */
 	private $_tname;
 
+	/**
+	 * Holds the PDO connector.
+	 * @var boolÊ|ÊPDO
+	 */
 	private $_adapter = false;
+
 
 	const DISTINCT = 'distinct';
     const COLUMNS = 'columns';
@@ -88,9 +111,17 @@ class Query {
 	const SQL_VALUES = 'VALUES';
 
 
-
+	/**
+	 * Internal used Array which holds all options and commands
+	 * requested form the SQL-Query
+	 * @var bool | array
+	 */
 	private $_querystack = false;
 
+	/**
+	 * Bare initializing array for SELECT querys;
+	 * @var array
+	 */
 	private $_querystack_select_init = array(
 			self::TYPE => self::SELECT,
 			self::DISTINCT => false,
@@ -107,6 +138,10 @@ class Query {
 			self::BIND => array()
 		);
 
+	/**
+	 * Bare initializing array for UPDATE querys;
+	 * @var array
+	 */
 	private $_querystack_update_init = array(
 			self::TYPE => self::UPDATE,
 			self::TABLES => array(),
@@ -116,6 +151,10 @@ class Query {
 			self::BIND => array()
 		);
 
+	/**
+	 * Bare initializing array for INSERT querys;
+	 * @var array
+	 */
 	private $_querystack_insert_init = array(
 			self::TYPE => self::INSERT,
 			self::INTO => array(),
@@ -124,6 +163,10 @@ class Query {
 			self::BIND => array()
 		);
 
+	/**
+	 * Bare initializing array for DELETE querys;
+	 * @var array
+	 */
 	private $_querystack_delete_init = array(
 			self::TYPE => self::DELETE,
 			self::FROM => array(),
@@ -133,20 +176,45 @@ class Query {
 		);
 
 
+	/**
+	 * Definition where a "WHERE" statement is allowed
+	 * @var array
+	 */
 	private $_WHERE_allowed = array(
 			self::SELECT,
 			self::DELETE,
 			self::UPDATE
 	);
 
+	/**
+	 * Time which a query needed to execute
+	 * @var null | float
+	 */
 	private $_querytime = null;
+
+	/**
+	 * Time the query was send
+	 * @var null | float
+	 */
 	private $_querytime_start = null;
+
+	/**
+	 * Time the query finished
+	 * @var null | float
+	 */
 	private $_querytime_end = null;
 
 
 // ************************************************************************** //
 
-	public function __construct($tablename, $adapter){
+	/**
+	 * Method: __construct
+	 * Sets the Adapter and the table name.
+	 *
+	 * @param string $tablename
+	 * @param PDO $adapter
+	 */
+	public function __construct($tablename, &$adapter){
 		$this->_tname = $tablename;
 		$this->_adapter = $adapter;
 	}
@@ -154,8 +222,10 @@ class Query {
 
 	/**
 	 * Method: select
+	 * Initalizes a Select query.
 	 *
-	 * @param string|array $what
+	 * @param string|array $what Column names.
+	 * @returns Query
 	 */
 	public function select($what=null){
 		if($this->_querystack)
@@ -178,9 +248,11 @@ class Query {
 
 	/**
 	 * Method: update
-	 * format: array('table' => 'new value')
-	 * @param array $set
+	 * Initializes a UPDATE Query.
+	 *
+	 * @param array $set format: array('table' => 'new value')
 	 * @throws Exception
+	 * @return Query
 	 */
 	public function update(array $set) {
 		if($this->_querystack)
@@ -196,15 +268,13 @@ class Query {
 		return $this;
 	}
 
-	public function set(array $set){
-		foreach ($set as $col => $v) {
-			$this->_querystack[self::SET][][$col] = $v;
-		}
-
-
-		return $this;
-	}
-
+	/**
+	 * Method: columns
+	 * Sets the columns which will be used for the query
+	 * @param array $columns
+	 * @throws Exception
+	 * @return Query
+	 */
 	public function columns(array $columns){
 		if(!array_key_exists(self::COLUMNS, $this->_querystack))
 			throw new Exception();
@@ -214,6 +284,16 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: addTable
+	 * Adds a Table to the Query.
+	 *
+	 * @param array | string $table Can be a string like "table" or "table as t"
+	 * 	or an array with the foramt of ('alias' => 'table')
+	 *
+	 * @throws Exception
+	 * @return Query
+	 */
 	public function addTable($table){
 		if(!array_key_exists(self::TABLES, $this->_querystack))
 			throw new Exception('Cant use addTable here!');
@@ -227,7 +307,14 @@ class Query {
 		return $this;
 	}
 
-	public function insert($what){
+	/**
+	 * Method: insert
+	 * Initilizes a INSERT query
+	 * @param array $what format: ('column' => 'value')
+	 * @throws Exception
+	 * @returns Query
+	 */
+	public function insert(array $what){
 		if($this->_querystack)
 			throw new Exception();
 
@@ -243,6 +330,13 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: delete
+	 * Initilizes a DELETE query
+	 *
+	 * @throws Exception
+	 * @return Query
+	 */
 	public function delete(){
 		if($this->_querystack)
 			throw new Exception();
@@ -252,6 +346,14 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: where
+	 * Adds a Where clause to the query
+	 *
+	 * @param string $where
+	 * @throws Exception
+	 * @return Query
+	 */
 	public function where($where){
 		if(!in_array($this->_querystack[self::TYPE], $this->_WHERE_allowed))
 			throw new Exception();
@@ -261,6 +363,14 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: orWhere
+	 * Adds an Where clause to the query
+	 *
+	 * @param string $where
+	 * @throws Exception
+	 * @return Query
+	 */
 	public function orWhere($where){
 		if(!in_array($this->_querystack[self::TYPE], $this->_WHERE_allowed))
 			throw new Exception();
@@ -270,6 +380,14 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: from
+	 * Adds the FROM clause to the query
+	 *
+	 * @param string $col format: 'column' or 'column as c'
+	 * @throws Exception
+	 * Ïreturn Query
+	 */
 	public function from($col){
 		if(!array_key_exists(self::FROM, $this->_querystack))
 			throw new Exception('Cant use FROM here!');
@@ -281,10 +399,6 @@ class Query {
 		}
 
 		return $this;
-	}
-
-	public function into($where){
-
 	}
 
 	/**
@@ -325,6 +439,12 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: distinct
+	 * Adds the Distinct clause to the SELECT query
+	 *
+	 * @throws Exception
+	 */
 	public function distinct(){
 		if(!array_key_exists(self::DISTINCT, $this->_querystack))
 			throw new Exception('Cant use DISTINCT HERE!');
@@ -333,6 +453,11 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: having
+	 * Adds the having clause to the array.
+	 * @param array|string $cond conditions for having
+	 */
 	public function having($cond){
 		if(!array_key_exists(self::HAVING, $this->_querystack))
 			throw new Exception("cant use having here");
@@ -347,6 +472,13 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: group
+	 * Adds the GROUP BY Clause to the query
+	 *
+	 * @param string | array $by column(s) for the GROUP BY
+	 * @throws Exception
+	 */
 	public function group($by){
 		if(!array_key_exists(self::GROUP, $this->_querystack))
 			throw new Exception('Cant use GROUP BY here!');
@@ -358,6 +490,13 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: order
+	 * Adds the ORDER BY Clause to the query
+	 *
+	 * @param string | array $by column(s) for the ORDER BY
+	 * @throws Exception
+	 */
 	public function order($by){
 		if(!array_key_exists(self::ORDER, $this->_querystack))
 			throw new Exception('Cant use ORDER BY here!');
@@ -370,6 +509,14 @@ class Query {
 		return $this;
 	}
 
+	/**
+	 * Method: limit
+	 * Adds the LIMIT clause to the Query
+	 *
+	 * @param int $count
+	 * @param int $offset
+	 * @throws Exception
+	 */
 	public function limit($count=NULL, $offset=NULL){
 		if(!array_key_exists(self::LIMIT_COUNT, $this->_querystack) ||
 			!array_key_exists(self::LIMIT_OFFSET, $this->_querystack))
@@ -382,6 +529,14 @@ class Query {
 	}
 
 
+	/**
+	 * Method: union
+	 * Adds an UNION to the query
+	 *
+	 * @param Query | string $select can be an Query object or string containing
+	 * a query
+	 * @throws Exception
+	 */
 	public function union($select = array()){
 		if(!array_key_exists(self::UNION, $this->_querystack))
 			throw new Exception("Cant use UNION here");
@@ -422,6 +577,12 @@ class Query {
 
 // ************************************************************************** //
 
+	/**
+	 * Method: fetch
+	 * Executes the query and returns a Resultobject containg all results
+	 *
+	 * @return Result | null
+	 */
 	public function fetch(){
 		$query = $this->_assemble();
 		$stmt = $this->_adapter->prepare($query);
@@ -447,6 +608,11 @@ class Query {
 		return new Result($query, $this->querytime(), $ret);
 	}
 
+	/**
+	 * Method: exec
+	 * Executes the Query.
+	 *
+	 */
 	public function exec(){
 		$query = $this->_assemble();
 
@@ -468,22 +634,45 @@ class Query {
 			return $this->_adapter->lastInsertId();
 	}
 
+	/**
+	 * Method: querytime
+	 * Calculates the time the query needed
+	 * @return float
+	 */
 	public function querytime(){
 		if(!$this->_querytime)
 			$this->_querytime = $this->_querytime_end - $this->_querytime_start;
 		return $this->_querytime;
 	}
 
+	/**
+	 * Method: _type
+	 * Returns the Querytype
+	 *
+	 * @return string
+	 */
 	public function _type(){
 		if(!$this->_querystack)
 			return $this->_querystack;
 		return $this->_querystack[self::TYPE];
 	}
 
+	/**
+	 * Method: _toString
+	 * Returns the Query
+	 *
+	 * @return string
+	 */
 	public function _toString(){
 		return $this->_assemble();
 	}
 
+	/**
+	 * Method: escpae
+	 * Escapes a Value for use in the query
+	 *
+	 * @param mixed $var
+	 */
 	public function escpae($var){
 		if(is_int($var))
 			return (int) $var;
@@ -499,6 +688,12 @@ class Query {
 
 // ************************************************************************** //
 
+	/**
+	 * Method: _assemble
+	 * Assables the Query
+	 * @throws Exception
+	 * @return string
+	 */
 	private function _assemble(){
 		switch ($this->_querystack[self::TYPE]) {
 			case self::SELECT:
@@ -519,6 +714,11 @@ class Query {
 		}
 	}
 
+	/**
+	 * Method: _assembleSelect
+	 * Assables a SELECT query
+	 * @return string
+	 */
 	private function _assembleSelect(){
 		$sql = "";
 
@@ -630,6 +830,11 @@ class Query {
 
 	}
 
+	/**
+	 * Method: _assembleUpdate
+	 * Assembales a UPDATE query
+	 * @return string
+	 */
 	private function _assembleUpdate(){
 		$sql = "";
 
@@ -679,6 +884,11 @@ class Query {
 		return $sql;
 	}
 
+	/**
+	 * Method: _assembleInsert
+	 * Assembles a INSERT Query
+	 * @return string
+	 */
 	private function _assembleInsert(){
 		$sql = "";
 
@@ -712,6 +922,12 @@ class Query {
 		return $sql;
 	}
 
+	/**
+	 * Method: _assembleDelete
+	 * Assebles a DELETE query
+	 *
+	 * @return string
+	 */
 	private function _assembleDelete(){
 		$sql = "";
 
@@ -767,6 +983,17 @@ class Query {
 		return $sql;
 	}
 
+	/**
+	 * Method: _add
+	 *
+	 * Adds singleparts to the Query
+	 *
+	 * @param string $sql
+	 * @param sring | array $what
+	 * @param string $prefix
+	 * @param string $postfix
+	 * @param bool $trim
+	 */
 	private function _add(&$sql, $what, $prefix='', $postfix='', $trim=true){
 		if(is_array($what)){
 			$what = implode($postfix, $what);
@@ -781,6 +1008,14 @@ class Query {
 
 // ************************************************************************** //
 
+	/**
+	 * Method: _join
+	 * Prepares Joins
+	 *
+	 * @param string $type
+	 * @param array $join
+	 * @throws Exception
+	 */
 	private function _join($type, array $join){
 
 		if(!array_key_exists(self::JOIN, $this->_querystack))
@@ -820,10 +1055,18 @@ class Query {
 		$this->_querystack[self::JOIN][] = $join;
 	}
 
+	/**
+	 * Method: _startQuery
+	 * Records the time when a query was started
+	 */
 	private function _startQuery(){
 		$this->_querytime_start = microtime(true);
 	}
 
+	/**
+	 * Method: _endQuery
+	 * Records the time when a query has ended
+	 */
 	private function _endQuery(){
 		$this->_querytime_end = microtime(true);
 	}
