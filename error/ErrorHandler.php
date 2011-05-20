@@ -161,6 +161,14 @@ class ErrorHandler {
 	}
 
 
+	/**
+	 * Method: registerCustom404
+	 * Displays your own 404 error pages when debugmode is turned off.
+	 * The 404 file has to be somewhare in the template directory.
+	 *
+	 * @param string $path
+	 * @throws TemplateNotFoundException
+	 */
 	public static function registerCustom404 ($path){
 		if(file_exists(Config::getVal('path', 'app_path')) . $path) {
 			static::$custom404 = Config::getVal('path', 'app_path') . DIRECTORY_SEPARATOR
