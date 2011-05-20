@@ -16,7 +16,6 @@ class NoSQLEngine extends Base implements InterfaceEngine {
 
  	protected static $document;
 
-
 }
 
 ?>
