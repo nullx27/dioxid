@@ -28,6 +28,11 @@ abstract class Controller extends Base {
 	 */
 	protected static $params = array();
 
+	/**
+	 * Complete URL which was called
+	 * @var array
+	 * @staticvar
+	 */
 	protected static $baseUrl = array();
 
 	/**
@@ -88,21 +93,40 @@ abstract class Controller extends Base {
 	}
 
 
+	/**
+	 * Method: _setCalledUrl
+	 * Sets $baseUrl to the called URL
+	 * Just gets called from the Dispatcher
+	 * @param unknown_type $url_arr
+	 */
 	public static function _setCalledUrl($url_arr){
 		static::$baseUrl = $url_arr;
 	}
 
 
+	/**
+	 * Method: _getBaseUrl
+	 * Returns the BaseUrl
+	 * @return string
+	 */
 	public static function _getBaseUrl(){
 		return static::$baseUrl['scheme'] . '://' . static::$baseUrl['host'];
 	}
 
-
+	/**
+	 * Method: _getBaseUrlPath
+	 * Retuns the called Uripath
+	 * @return string
+	 */
 	public static function _getBaseUrlPath(){
 		return static::$baseUrl['path'];
 	}
 
-
+	/**
+	 * Method: _getFullUrl
+	 * Returns the full URL
+	 * @return string
+	 */
 	public static function _getFullUrl(){
 		return static::$baseUrl['scheme'] . '://' .
 				static::$baseUrl['host'] .
@@ -111,12 +135,21 @@ abstract class Controller extends Base {
 				((@static::$baseUrl['query']) ? '?' .@static::$baseUrl['query'] : "");
 	}
 
-
+	/**
+	 * Method: __getFullRequest
+	 *	returns baseurl array
+	 * @return array
+	 */
 	public static function __getFullRequest(){
 		return static::$baseUrl;
 	}
 
-
+	/**
+	 * Method: getView
+	 * Returns an View instance
+	 *
+	 * @return View
+	 */
 	protected static function getView(){
 		return View::getInstance();
 	}
