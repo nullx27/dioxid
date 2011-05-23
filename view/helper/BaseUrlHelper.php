@@ -22,13 +22,17 @@ class BaseUrlHelper {
 		if(is_subclass_of($class, 'dioxid\controller\Controller')){
 			$this->baseUrl = $class::__getFullRequest();
         }
+
+
 	}
 
 	public function base(){
-		return $this->baseUrl['scheme'] . '://' . $this->baseUrl['host'] .
-			(@$this->baseUrl['port'])? ":".$this->baseUrl['port'] :"" .
-			(Config::getVal('misc', 'dispatcher_limit') !=0) ?
-		 	DIRECTORY_SEPARATOR . Config::getVal('misc', 'dispatcher_limit'):"";
+
+		 return $this->baseUrl['scheme'] . '://' .
+		 		$this->baseUrl['host'] .
+		 		(isset($this->baseUrl['port']) ? ":". $this->baseUrl['port'] : "") .
+		 		'/' .
+		 		(Config::getVal('misc', 'dispatcher_limit') ? Config::getVal('misc', 'dispatcher_limit') :"");
 	}
 
 	public function add($path){
@@ -40,6 +44,7 @@ class BaseUrlHelper {
 	}
 
 	public function __toString(){
+
 		return $this->base();
 
 	}
