@@ -358,6 +358,14 @@ class Query {
 		if(!in_array($this->_querystack[self::TYPE], $this->_WHERE_allowed))
 			throw new Exception();
 
+		$args = func_get_args();
+		if(count($args) > 1){
+			$args = array_slice($args, 1);
+			foreach ($args as $arg){
+				$where = preg_replace('/\?/', $this->escpae($arg), $where, 1);
+			}
+		}
+
 		$this->_querystack[self::WHERE][] = array(self::SQL_AND => $where);
 
 		return $this;
@@ -374,6 +382,14 @@ class Query {
 	public function orWhere($where){
 		if(!in_array($this->_querystack[self::TYPE], $this->_WHERE_allowed))
 			throw new Exception();
+
+		$args = func_get_args();
+		if(count($args) > 1){
+			$args = array_slice($args, 1);
+			foreach ($args as $arg){
+				$where = preg_replace('/\?/', $this->escpae($arg), $where, 1);
+			}
+		}
 
 		$this->_querystack[self::WHERE][] = array(self::SQL_OR => $where);
 
