@@ -93,16 +93,13 @@ class SimpleEngine extends Base implements InterfaceEngine {
           throw new TemplateNotFoundException('No template provided');
         }
 
-        //fully quallified template path
-        if($without_ext) {
-        	$fqtp = Config::getVal('path', 'app_path') .
-        		Config::getVal('path', 'template_path') . DIRECTORY_SEPARATOR .
-        		$folder . DIRECTORY_SEPARATOR . $template .
-        		Config::getVal('view', 'extension');
-        } else {
-        	$fqtp = Config::getVal('path', 'app_path') .
-        	Config::getVal('path', 'template_path') . "/" .  $template;
-        }
+        $fqtp = Config::getVal('path', 'app_path') .
+        		Config::getVal('path', 'template_path') .
+        		DIRECTORY_SEPARATOR .
+        		$folder .
+        		DIRECTORY_SEPARATOR .
+        		$template .
+				($without_ext ? Config::getVal('view', 'extension') : "");
 
         if(file_exists($fqtp)){
         	$this->_template = $fqtp;
