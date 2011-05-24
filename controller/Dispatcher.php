@@ -88,7 +88,7 @@ class Dispatcher {
 
 		if(count($chunks) >= 2) $GET = array_merge($GET, array_slice($chunks, 2));
 
-		if($req_url['query'] != ""){
+		if(@$req_url['query'] != ""){
 			$pairs = explode('&', $req_url['query']);
 			foreach($pairs as $pair){
 				$parts = explode('=', $pair);
