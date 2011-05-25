@@ -8,6 +8,8 @@
 
 namespace dioxid\model\query;
 
+use Iterator;
+
 /**
  * dioxid\model\query$Result
  * The Result Object
@@ -15,7 +17,7 @@ namespace dioxid\model\query;
  * @date 20.05.2011 17:46:29
  *
  */
-class Result {
+class Result implements Iterator{
 
 	/**
 	 * Time the query needed to finish
@@ -34,6 +36,8 @@ class Result {
 	 * @var array
 	 */
 	protected $_result = array();
+
+	protected $cursor = 0;
 
 	/**
 	 * Method: __construct
@@ -80,6 +84,36 @@ class Result {
 	public function getTime(){
 		return $this->_querytime;
 	}
+
+ 	public function rewind() {
+    	$this->cursor = 0;
+  	}
+
+  	public function valid() {
+  		$c = 0;
+  		//find the biggest array in the results, so nothing gets cut out
+  		foreach($this->_result as $res){
+			$c = (count($res) > $c)? count($res) : $c;
+  		}
+
+    	return $this->cursor < $c;
+  	}
+
+  	public function key() {
+    	return $this->cursor;
+  	}
+
+  	public function current() {
+		$out = array();
+  		foreach ($this->_result as $key => $val){
+			$out[@$key] = $this->_result[@$key][$this->cursor];
+		}
+		return $out;
+  	}
+
+  	public function next() {
+    	$this->cursor++;
+  	}
 }
 
 ?>
