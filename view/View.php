@@ -82,6 +82,7 @@ class View extends Base {
 	}
 
 	public function __set($k,$v){
+
 		return call_user_func_array(array(static::$engine, '__set'), array($k,$v));
 	}
 

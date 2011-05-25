@@ -154,6 +154,7 @@ class SimpleEngine extends Base implements InterfaceEngine {
     }
 
     public function __set($key, $val){
+
     	$this->assign($key, $val);
     }
 
@@ -207,6 +208,7 @@ class SimpleEngine extends Base implements InterfaceEngine {
 
     //TODO: Add Sendboxcode here
     public function __get($key){
+
 		if(array_key_exists($key, $this->_helper))
     		return $this->_helper[$key];
     }

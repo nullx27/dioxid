@@ -217,6 +217,7 @@ class Query {
 	public function __construct($tablename, &$adapter){
 		$this->_tname = $tablename;
 		$this->_adapter = $adapter;
+
 	}
 
 

@@ -19,6 +19,7 @@ class ContextSandbox {
 	public function __construct($__path, $__context, $__helper){
 
 		$this->helper = $__helper;
+
 		extract($__context);
 
 		unset($__context);
@@ -34,6 +35,7 @@ class ContextSandbox {
 	}
 
 	public function __get($key){
+
 		if(array_key_exists($key, $this->helper))
 			return $this->helper[$key];
 	}
