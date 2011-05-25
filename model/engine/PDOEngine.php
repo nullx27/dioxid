@@ -57,6 +57,9 @@ abstract class PDOEngine extends Base implements InterfaceEngine {
 	 * @param array $args
 	 */
 	public function __call($name, $args){
+		if(method_exists($this, $name))
+			return  call_user_func_array(array($this, $name), $args);
+
 		$callback = array ( static::$pdo, $name ) ;
         return call_user_func_array ( $callback , $args ) ;
 	}
