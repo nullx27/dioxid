@@ -8,10 +8,9 @@
 
 namespace dioxid\model\engine;
 
-use PDO;
-use dioxid\config\Config;
 use dioxid\model\engine\PDOEngine;
-use dioxid\model\query\Query;
+use dioxid\config\Config;
+use PDO;
 
 /**
  * dioxid\model\engine$MySQLEngine
@@ -23,29 +22,23 @@ use dioxid\model\query\Query;
  */
 class MySQLEngine extends PDOEngine {
 
-	public static $_tname;
-
 	/**
 	 * Method: _init
 	 * Constructor. Sets the MySQL specific DSN.
 	 *
 	 */
-	public static function _init($_tname){
+	public static function _init(){
 		$dsn = 'mysql:dbname='.Config::getVal('database', 'database', true) .
 				';host='.Config::getVal('database', 'host', true);
 
 		$options = array(
+			PDO::MYSQL_ATTR_READ_DEFAULT_FILE => '/etc/my.cnf',
 			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
 			PDO::MYSQL_ATTR_COMPRESS => true);
 
 		parent::_init($dsn, $options);
-
-		static::$_tname = $_tname;
 	}
 
-	protected static function query(){
-		return new Query(static::$_tname, &static::$pdo);
-	}
 }
 
 ?>
