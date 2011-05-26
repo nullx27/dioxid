@@ -13,7 +13,8 @@ use PDOException;
 use Exception;
 
 
-use dioxid\model\query\Result;
+use dioxid\model\query\ResultSet;
+use dioxid\model\query\SingleResult;
 use dioxid\model\query\Query;
 use dioxid\error\exception\CouldNotWriteToCacheException;
 
@@ -41,6 +42,8 @@ class Query {
 	 * @var boolÊ|ÊPDO
 	 */
 	private $_adapter = false;
+
+	private $_asm_query = false;
 
 
 	const DISTINCT = 'distinct';
@@ -594,15 +597,9 @@ class Query {
 
 // ************************************************************************** //
 
-	/**
-	 * Method: fetch
-	 * Executes the query and returns a Resultobject containg all results
-	 *
-	 * @return Result | null
-	 */
-	public function fetch(){
-		$query = $this->_assemble();
-		$stmt = $this->_adapter->prepare($query);
+	private function execute_query(){
+		$this->asm_query = $this->_assemble();
+		$stmt = $this->_adapter->prepare($this->asm_query);
 
 		if(count($this->_querystack[self::BIND]) > 0){
 			foreach($this->_querystack[self::BIND] as $items){
@@ -622,7 +619,31 @@ class Query {
 			return FALSE;
 		}
 
-		return new Result($query, $this->querytime(), $ret);
+		return $ret;
+
+	}
+
+	/**
+	 * Method: fetch
+	 * Executes the query and returns a Resultobject containg all results
+	 *
+	 * @return Result | null
+	 */
+
+
+	public function fetchAll(){
+		$this->execute_query();
+		return new ResultSet($this->asm_query,$this->querytime(), $this->execute_query());
+	}
+
+	/**
+	 *
+	 * Method: fetch
+	 * One result only!
+	 */
+	public function fetch(){
+		$this->execute_query();
+		return new SingleResult($this->asm_query,$this->querytime(), $this->execute_query());
 	}
 
 	/**

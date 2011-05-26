@@ -17,7 +17,7 @@ use Iterator;
  * @date 20.05.2011 17:46:29
  *
  */
-class Result implements Iterator{
+class ResultSet implements Iterator{
 
 	/**
 	 * Time the query needed to finish
@@ -50,11 +50,11 @@ class Result implements Iterator{
 		$this->_query = $query;
 		$this->_querytime = $time;
 
-		foreach ($result as $item ){
-			foreach ($item as $key => $value){
-				$this->_result[$key][] = $value;
+			foreach ($result as $item){
+				foreach ($item as $key => $value)
+					$this->_result[$key][] = $value;
 			}
-		}
+
 	}
 
 	public function __get($key){
