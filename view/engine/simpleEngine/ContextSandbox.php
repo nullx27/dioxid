@@ -3,7 +3,8 @@
  * ContextSandbox.php
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @version 1.0
- * @package package_name
+ * @package View
+ * @subpackage Engine
  */
 
 namespace dioxid\view\engine\simpleEngine;

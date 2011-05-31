@@ -4,7 +4,7 @@
  * Csv.php - dioxid
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @version 1.0
- * @package lib
+ * @package Lib
  */
 
 namespace dioxid\lib;

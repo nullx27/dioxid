@@ -4,7 +4,7 @@
  * View.php - dioxid
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @version 1.0
- * @package view
+ * @package View
  */
 
 namespace dioxid\view;

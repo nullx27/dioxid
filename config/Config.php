@@ -4,7 +4,7 @@
  * config.php - dioxid
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @version 1.0
- * @package config
+ * @package Config
  */
 
 namespace dioxid\config;
