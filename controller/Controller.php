@@ -8,9 +8,12 @@
  */
 
 namespace dioxid\controller;
-use dioxid\lib\Base;
 
+use dioxid\lib\Base;
 use dioxid\view\View;
+use dioxid\config\Config;
+use dioxid\error\exception\HeaderAlreadySentException;
+
 
 /**
  * dioxid\controller$Controller
@@ -110,7 +113,9 @@ abstract class Controller extends Base {
 	 * @return string
 	 */
 	public static function _getBaseUrl(){
-		return static::$baseUrl['scheme'] . '://' . static::$baseUrl['host'];
+		return static::$baseUrl['scheme'] . '://' . static::$baseUrl['host'] .
+			((@static::$baseUrl['port']) ? ':' .@static::$baseUrl['port'] : "") .
+			(Config::getVal('misc', 'dispatcher_limit') ? '/' . trim(Config::getVal('misc', 'dispatcher_limit'), '/') :"");
 	}
 
 	/**
@@ -153,6 +158,55 @@ abstract class Controller extends Base {
 	protected static function getView(){
 		return View::getInstance();
 	}
+
+	/**
+	 * Method: internalRedirect
+	 * Triggers an internal redirect
+	 *
+	 * @param array | string $location format: array('controller','action')
+	 * @param array $param format: array('key' => 'value')
+	 * @param bool $permanent
+	 * @throws HeaderAlreadySentException
+	 */
+	protected static function internalRedirect($location, $param = array(), $permanent=false){
+		if(headers_sent())
+			throw new HeaderAlreadySentException();
+
+		if(is_array($location)){
+			$url = static::_getBaseUrl() . '/' .  lcfirst(key($location)) . '/' . strtolower($location[key($location)]);
+
+			if(count($param) > 0)
+				foreach($param as $k => $v)
+					$url .= '/' . $k . '/' . $v;
+		} else {
+			$url = $location;
+		}
+
+
+		if($permanent)
+			header('HTTP/1.1 301 Moved Permanently');
+		header('Location: ' . $url);
+	}
+
+	/**
+	 * Method: externalRedirect
+	 * Triggers an external redirect
+	 *
+	 * @param string $url
+	 * @param bool $permanent
+	 * @throws HeaderAlreadySentException
+	 */
+	protected static function externalRedirect($url, $permanent=false){
+		if(headers_sent())
+			throw new HeaderAlreadySentException();
+
+		if($permanent)
+			header('HTTP/1.1 301 Moved Permanently');
+
+		header('Location: ' . $url);
+	}
+
+
 }
 
 ?>
