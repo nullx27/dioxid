@@ -62,8 +62,7 @@ class Dispatcher {
 		// Build the reuqest URL
 		// taken and modified from http://stackoverflow.com/questions/5216172/getting-current-url
 		$req_url = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
-		$req_url .= $_SERVER["SERVER_NAME"] .
-			(($_SERVER["SERVER_PORT"] != "80") ? ":". $_SERVER["SERVER_PORT"] : "");
+		$req_url = $_SERVER["HTTP_HOST"];
 		$req_url .= $_SERVER["REQUEST_URI"];
 		$req_url = parse_url($req_url);
 		static::$calledUrl = $req_url;
