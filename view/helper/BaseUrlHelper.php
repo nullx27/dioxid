@@ -23,31 +23,24 @@ class BaseUrlHelper {
 		if(is_subclass_of($class, 'dioxid\controller\Controller')){
 			$this->baseUrl = $class::__getFullRequest();
         }
-
-
 	}
 
 	public function base(){
-
-		 return $this->baseUrl['scheme'] . '://' .
-		 		$this->baseUrl['host'] .
-		 		(isset($this->baseUrl['port']) ? ":". $this->baseUrl['port'] : "") .
-		 		'/' .
-		 		(Config::getVal('misc', 'dispatcher_limit') ? Config::getVal('misc', 'dispatcher_limit') :"");
+		 return $this->baseUrl['scheme'] . '://' . $this->baseUrl['host'] .
+			((@$this->baseUrl['port']) ? ':' .@$this->baseUrl['port'] : "") .
+			 (Config::getVal('misc', 'dispatcher_limit') ? '/' . trim(Config::getVal('misc', 'dispatcher_limit'), '/') :"");
 	}
 
 	public function add($path){
 		return $this->base() . '/' .  trim($path, "/");
 	}
 
-	public function changeProtocol($proto){
-		return $proto . '://' . $this->baseUrl['host'];
+	public function setProtocol($proto){
+		$this->baseUrl['scheme'] = $proto;
 	}
 
 	public function __toString(){
-
 		return $this->base();
-
 	}
 
 }
