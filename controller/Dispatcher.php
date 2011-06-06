@@ -64,9 +64,7 @@ class Dispatcher {
 		$req_url = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
 		$req_url .= $_SERVER["HTTP_HOST"];
 		$req_url .= $_SERVER["REQUEST_URI"];
-		$req_url = parse_url($req_url);
-		static::$calledUrl = $req_url;
-
+		$req_url = static::$calledUrl =  parse_url($req_url);
 
 		// If theres no dispatcher limit dont replace anything
 	    if(Config::getVal('misc', 'dispatcher_limit') != "" ||
@@ -77,17 +75,17 @@ class Dispatcher {
 	    	$request = $req_url['path'];
 	    }
 
-        $request = ltrim($request, '/');
-
+        $request = trim($request, '/');
 
 		$chunks = explode('/',$request);
+
 		// Parse the GET Params
 		$GET = array();
 		$param = array();
 
 		if(count($chunks) >= 2) $GET = array_merge($GET, array_slice($chunks, 2));
 
-		if(@$req_url['query'] != ""){
+		if(@$req_url['query'] != "") {
 			$pairs = explode('&', $req_url['query']);
 			foreach($pairs as $pair){
 				$parts = explode('=', $pair);
@@ -99,8 +97,6 @@ class Dispatcher {
 			$param[ $GET[$i] ] = $GET[$i+1];
 			if($GET[$i] == "" && $GET[$i+1] == "") break;
 		}
-
-
 
 		// Match static routes before standard dispatching
 		foreach (static::$staticRoutes as $route){
