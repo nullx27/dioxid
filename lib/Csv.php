@@ -10,7 +10,7 @@
 namespace dioxid\lib;
 
 use dioxid\lib\Base;
-use Exception;
+use dioxid\error\exception\WrongValueCountException;
 
 /**
  *
@@ -50,8 +50,5 @@ class CSV extends Base {
         return $out;
     }
 }
-
-class WrongValueCountException extends Exception {}
-
 
 ?>
