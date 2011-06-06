@@ -117,9 +117,9 @@ class SimpleEngine extends Base implements InterfaceEngine {
 		if(!$this->_template) throw new TemplateNotFoundException('No template loaded!');
 
 		$layout = ($this->_layout) ? new ContextSandbox(
-			$this->_layout, $this->_vars, &$this->_helper) : false;
+			$this->_layout, $this->_vars, $this->_helper) : false;
 		$content = new ContextSandbox(
-			$this->_template, $this->_vars, &$this->_helper);
+			$this->_template, $this->_vars, $this->_helper);
 
 		if($layout) {
 			$this->_output = str_replace(
