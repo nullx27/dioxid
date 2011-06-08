@@ -163,7 +163,7 @@ abstract class Controller extends Base {
 	 * Method: internalRedirect
 	 * Triggers an internal redirect
 	 *
-	 * @param array | string $location format: array('controller','action')
+	 * @param array | string $location format: array('controller' => 'action')
 	 * @param array $param format: array('key' => 'value')
 	 * @param bool $permanent
 	 * @throws HeaderAlreadySentException
