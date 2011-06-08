@@ -41,7 +41,7 @@ class Session {
 	public function __get($key){
 		if($key == "id") return session_id();
 
-		if(array_key_exists($key, $_SESSION[$this->namespace]))
+		if(@array_key_exists($key, $_SESSION[$this->namespace]))
 			return $_SESSION[$this->namespace][$key];
 		return false;
 	}
