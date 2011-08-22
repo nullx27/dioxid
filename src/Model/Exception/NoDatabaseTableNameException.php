@@ -3,7 +3,8 @@
  * NoDatabaseTableNameException.php
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @version 1.0
- * @package exceptions
+ * @package Model
+ * @subpackage Exception
  */
 
 namespace dioxid\model\exception;

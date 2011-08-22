@@ -5,6 +5,7 @@
  * @version 1.0
  * @package Lib
  * @subpackage Cookiejar
+ * @subpackage Exception
  */
 
 namespace dioxid\lib\cookiejar\exception;

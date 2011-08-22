@@ -23,7 +23,7 @@ class Loader {
 	 * Namespaces and their basedirecoties
 	 * @var unknown_type
 	 */
-    protected static $setup;
+    protected static $setup = array();
 
     /**
      * Method: setup
@@ -31,7 +31,11 @@ class Loader {
      * @param unknown_type $setup
      */
     public static function setup($setup = array()){
-        static::$setup[__NAMESPACE__] = __DIR__;
+    	if(count(static::$setup) != 0)
+    		throw new Exception('You cant use Loader::setup twice!!');
+
+    	//Add Dioxid as Standardnamespace
+    	static::$setup['dioxid'] = dirname(__DIR__);
         static::$setup = array_merge(static::$setup, $setup);
     }
 

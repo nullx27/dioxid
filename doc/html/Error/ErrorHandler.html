@@ -1,0 +1,386 @@
+<html>
+<head>
+<title>Docs For Class ErrorHandler</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">Error</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+        
+                                                                                                                    
+                                                                                          		  [ <a href="../classtrees_Error.html" class="menu">class tree: Error</a> ]
+		  [ <a href="../elementindex_Error.html" class="menu">index: Error</a> ]
+		  	    [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+      <b>Packages:</b><br />
+              <a href="../li_Dioxid.html">Dioxid</a><br />
+              <a href="../li_Common.html">Common</a><br />
+              <a href="../li_Config.html">Config</a><br />
+              <a href="../li_Controller.html">Controller</a><br />
+              <a href="../li_Error.html">Error</a><br />
+              <a href="../li_Lib.html">Lib</a><br />
+              <a href="../li_Model.html">Model</a><br />
+              <a href="../li_View.html">View</a><br />
+            <br /><br />
+                        <b>Files:</b><br />
+      	  <div class="package">
+			<a href="../Error/_src---Error---ErrorHandler.php.html">		ErrorHandler.php
+		</a><br>
+	  </div><br />
+	subpackage <b>Exception</b><br>  <div class="package">
+			<a href="../Error/Exception/_src---Error---Exception---TemplateNotFoundException.php.html">		TemplateNotFoundException.php
+		</a><br>
+	  </div><br />
+      
+      
+            <b>Classes:</b><br />
+        <div class="package">
+		    		<a href="../Error/ErrorHandler.html">ErrorHandler</a><br />
+	  </div>
+  <div class="package">
+	Exception<br />	    &nbsp;&nbsp;		<a href="../Error/Exception/TemplateNotFoundException.html">TemplateNotFoundException</a><br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Class: ErrorHandler</h1>
+Source Location: /src/Error/ErrorHandler.php<br /><br />
+
+
+<table width="100%" border="0">
+<tr><td valign="top">
+
+<h3><a href="#class_details">Class Overview</a></h3>
+<pre></pre><br />
+<div class="description">dioxid\error$ErrorHandler Application Exception and Errorhandler</div><br /><br />
+<h4>Author(s):</h4>
+<ul>
+          <li>Andre 'Necrotex' Peiffer &lt;<a href="mailto:necrotex@gmail.com">necrotex@gmail.com</a>&gt;</li>
+      </ul>
+
+
+
+
+    
+
+        
+</td>
+
+
+
+<td valign="top">
+<h3><a href="#class_methods">Methods</a></h3>
+<ul>
+    <li><a href="../Error/ErrorHandler.html#methoderrorHeader">errorHeader</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodexceptionHandler">exceptionHandler</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodhandleError">handleError</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodprettyStacktrace">prettyStacktrace</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodregister">register</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodregisterCustom404">registerCustom404</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodregisterErrorHandler">registerErrorHandler</a></li>
+    <li><a href="../Error/ErrorHandler.html#methodregisterExceptionHandler">registerExceptionHandler</a></li>
+    <li><a href="../Error/ErrorHandler.html#method_init">_init</a></li>
+  </ul>
+</td>
+
+</tr></table>
+<hr />
+
+<table width="100%" border="0"><tr>
+
+
+
+
+
+
+</tr></table>
+<hr />
+
+<a name="class_details"></a>
+<h3>Class Details</h3>
+<div class="tags">
+[line 22]<br />
+dioxid\error$ErrorHandler Application Exception and Errorhandler<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>author:</b>&nbsp;&nbsp;</td><td>Andre 'Necrotex' Peiffer &lt;<a href="mailto:necrotex@gmail.com">necrotex@gmail.com</a>&gt;</td>
+  </tr>
+</table>
+</div>
+</div><br /><br />
+<div class="top">[ <a href="#top">Top</a> ]</div><br />
+
+
+<hr />
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+
+  <hr />
+	<a name="methoderrorHeader"></a>
+	<h3>method errorHeader <span class="smalllinenumber">[line 105]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void errorHeader(
+unknown_type
+$code)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: errorHeader Sends an HTTP Header baased on the Exception/Error Code<br /><br /><br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">unknown_type&nbsp;&nbsp;</td>
+        <td><b>$code</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodexceptionHandler"></a>
+	<h3>method exceptionHandler <span class="smalllinenumber">[line 96]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void exceptionHandler(
+unknown_type
+$exception)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: exceptionHandler Handles Exception, prepares them and passes them to ErrorHandler<br /><br /><br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">unknown_type&nbsp;&nbsp;</td>
+        <td><b>$exception</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodhandleError"></a>
+	<h3>method handleError <span class="smalllinenumber">[line 119]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void handleError(
+int
+$errno, string
+$msg, string
+$file, int
+$line, [
+$name = null], [array
+$trace = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: handleError Sends the error http code, outputs debuginfo or errorpage<br /><br /><br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">int&nbsp;&nbsp;</td>
+        <td><b>$errno</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$msg</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$file</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">int&nbsp;&nbsp;</td>
+        <td><b>$line</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$trace</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$name</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodprettyStacktrace"></a>
+	<h3>method prettyStacktrace <span class="smalllinenumber">[line 149]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void prettyStacktrace(
+unknown_type
+$trace)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: prettyStacktrace<br /><br /><p>Shamelessly taken from http://stackoverflow.com/questions/3481419/how-to-disable-php-cutting-off-parts-of-long-arguments-in-exception-stack-trace and slightly modified</p><br /><br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">unknown_type&nbsp;&nbsp;</td>
+        <td><b>$trace</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregister"></a>
+	<h3>method register <span class="smalllinenumber">[line 68]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void register(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: register<br /><br /><p>Register both Error- and ExceptionHandler</p><br /><br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregisterCustom404"></a>
+	<h3>method registerCustom404 <span class="smalllinenumber">[line 171]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void registerCustom404(
+string
+$path)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: registerCustom404 Displays your own 404 error pages when debugmode is turned off.<br /><br /><p>The 404 file has to be somewhare in the template directory.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>throws:</b>&nbsp;&nbsp;</td><td>TemplateNotFoundException</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$path</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregisterErrorHandler"></a>
+	<h3>method registerErrorHandler <span class="smalllinenumber">[line 78]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void registerErrorHandler(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: registerErrorHandler<br /><br /><p>Registers the Errorhandler</p><br /><br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodregisterExceptionHandler"></a>
+	<h3>method registerExceptionHandler <span class="smalllinenumber">[line 87]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void registerExceptionHandler(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: registerExceptionHandler<br /><br /><p>Registers the Exceptionhandler</p><br /><br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_init"></a>
+	<h3>method _init <span class="smalllinenumber">[line 42]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _init(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Method: _init<br /><br /><p>Sets the Errorlevel based on the Configfile</p><br /><br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
+
+
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Tue, 23 Aug 2011 01:23:08 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

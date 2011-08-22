@@ -12,7 +12,7 @@ namespace dioxid\lib;
 use Exception;
 use Serializable;
 use dioxid\lib\cookiejar\exception\CouldNotWriteToCacheException;
-use dioxid\lib\cookiejar\exception\CookieNonInRegistryException;
+use dioxid\lib\cookiejar\exception\CookieNotInRegistryException;
 
 use dioxid\lib\cookiejar\Cookie;
 use dioxid\config\Config;

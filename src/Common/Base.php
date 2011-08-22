@@ -10,7 +10,6 @@
 namespace dioxid\common;
 
 /**
- * dioxid\lib$Base
  * Baseclass which main purpose it is to garantee the use of singletons
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @date 22.03.2011 14:54:19
