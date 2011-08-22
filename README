@@ -1,25 +1,32 @@
- ____ ___ _____  _____ ____  
-|  _ \_ _/ _ \ \/ /_ _|  _ \ 
+ ____ ___ _____  _____ ____
+|  _ \_ _/ _ \ \/ /_ _|  _ \
 | | | | | | | \  / | || | | |
 | |_| | | |_| /  \ | || |_| |
 |____/___\___/_/\_\___|____/
 
 Dioxid is a PHP 5.3 MVC Framework, inspired by Tom Frosts
-"Hydrogen" and the Zend Framework, licensed unter 
+"Hydrogen" and the Zend Framework, licensed unter
 The MIT License.
 
 I've written this becourse I needed a very flexible and
 powerful but yet small MVC Framework with very few restrictions.
 
-I didn't like all the conventions I'd had to face with the 
+I didn't like all the conventions I'd had to face with the
 Zend Framework. Also with a growing project the internal held
 objects getting real big, even if I don't need them.
 
 So here it is: Dioxid. Consider this is alfa to beta software.
 Its partly very messy. I'll clean this up and make it pretty
-when all features are implemented. 
+when all features are implemented.
 
 The Documentation is very lousy and rough or is missing
 completely  but I'll try to handle with this also later.
 
 So if your having any querstions, drop me a line ;)
+
+
+===============================================================
+                        How to use
+===============================================================
+
+Comming soon ;) Take a look at the exsample Folder
