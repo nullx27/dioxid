@@ -13,6 +13,7 @@ use dioxid\error\exception\NotFoundException;
 
 use dioxid\controller\Controller;
 use dioxid\config\Config;
+use dioxid\controller\Router;
 
 /**
  * dioxid\controller$Dispatcher
@@ -77,6 +78,19 @@ class Dispatcher {
 
         $request = trim($request, '/');
 
+		//Dispatch Static Routes
+		$sroutes = Router::matchRoutes($request);
+		if($sroutes){
+			static::load(
+				Config::getVal('misc', 'controller_namespace', true) .$sroutes['class'],
+				$sroutes['method'],
+				$sroutes['param']
+			);
+		return;
+		}
+
+
+
 		$chunks = explode('/',$request);
 
 		// Parse the GET Params
@@ -96,17 +110,6 @@ class Dispatcher {
 		for($i=0; $i<=count($GET)-1; $i+=2){
 			$param[ $GET[$i] ] = $GET[$i+1];
 			if($GET[$i] == "" && $GET[$i+1] == "") break;
-		}
-
-		// Match static routes before standard dispatching
-		foreach (static::$staticRoutes as $route){
-			$pattern = '/(' . str_replace('*', '.*', str_replace('/','\/',
-				$route['route'])) . '(?:\?.*)?)/';
-			if(preg_match($pattern, $request)){
-				static::load(Config::getVal('misc', 'controller_namespace',true) .
-					$route['class'], $route['method'], $param);
-				return;
-			}
 		}
 
 		// If no controller is provided
