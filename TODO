@@ -4,4 +4,12 @@ TODO
 
 - ACL
 - Validatoren
-- Caching (something like RECache)
+- Caching (with a cachemanager like RECache)
+    - xCache
+    - Memcache
+    - Memcached
+    - ?Output Filecaching?
+- custom Layout vars (like {{content}})
+- version git hook
+- debug tools (Logging, FirePHP, ...)
+

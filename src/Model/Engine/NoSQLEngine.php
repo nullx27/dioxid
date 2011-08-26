@@ -10,9 +10,9 @@
 namespace dioxid\model\engine;
 
 use dioxid\common\Base;
-use dioxid\model\InterfaceEngine;
+use dioxid\model\ModelEngineInterface;
 
-class NoSQLEngine extends Base implements InterfaceEngine {
+class NoSQLEngine extends Base implements ModelEngineInterface {
 
  	protected static $document;
 

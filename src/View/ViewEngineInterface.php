@@ -1,7 +1,7 @@
 <?php
 
 /**
- * InterfaceEngine.php - dioxid
+ * ViewEngineInterface.php - dioxid
  * @author Andre 'Necrotex' Peiffer <necrotex@gmail.com>
  * @version 1.0
  * @package View
@@ -10,7 +10,7 @@
 
 namespace dioxid\view;
 
-interface InterfaceEngine {
+interface ViewEngineInterface {
 
     public static function getInstance();
 

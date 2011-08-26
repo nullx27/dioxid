@@ -42,7 +42,7 @@ class Loader {
     /**
      * Method: load
      * This loads the actual files.
-     * Not intent for direct use. This should get registert als autoloader
+     * Not intent for direct use. This should get registered as autoloader
      * @param string $namespace
      */
     public static function load($namespace) {

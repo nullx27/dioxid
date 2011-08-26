@@ -4,29 +4,46 @@
 | |_| | | |_| /  \ | || |_| |
 |____/___\___/_/\_\___|____/
 
+##Flexible PHP5.3 MVC Framework
+
 Dioxid is a PHP 5.3 MVC Framework, inspired by Tom Frosts
 "Hydrogen" and the Zend Framework, licensed unter
 The MIT License.
 
-I've written this becourse I needed a very flexible and
+I've written it becourse I needed a very flexible and
 powerful but yet small MVC Framework with very few restrictions.
 
 I didn't like all the conventions I'd had to face with the
 Zend Framework. Also with a growing project the internal held
 objects getting real big, even if I don't need them.
 
-So here it is: Dioxid. Consider this is alfa to beta software.
-Its partly very messy. I'll clean this up and make it pretty
-when all features are implemented.
+So here it is: Dioxid. At the moment it works pretty well, with 
+very few know bugs. Through this framework is still young there may be
+more, yet not know, urgent or harmless bugs. So if you discover one, 
+drop me a line or send me a patch ;) 
 
-The Documentation is very lousy and rough or is missing
-completely  but I'll try to handle with this also later.
+Unfortunatly there is a lack of documentation at the moment. The most
+importent files have some PHPDOc style comments with usage examples in
+them. As soon as I get around to implement the last few things for
+version 1.0, I'll write a complete How to use guide with tutorials and
+a improve the PHPDoc.
 
-So if your having any querstions, drop me a line ;)
+##How to use
+Copy the index.php and config.ini files from the examples folder into your
+project diretory and edit them to your needs.
 
+Dioxid is a modeled after the Frontcontrollerdesignpattern, so you need
+to tell your Webserver to redirect all request to the index.php. There
+is also an example file for nginx in the examples folder.
 
-===============================================================
-                        How to use
-===============================================================
+Now your ready to start working on your first controller.
 
-Comming soon ;) Take a look at the exsample Folder
+A more detailed documentation is at the moment under constrution and 
+should be soon availbe.
+
+For a more detailed look into Dioxid inner workings or adanved usage
+take a look at the doc folder for a PHPDoc overview.
+
+##Last but not least
+If your having any querstions, drop me a line ;)
+

@@ -15,12 +15,12 @@ use dioxid\view\View;
 use Exception;
 use dioxid\common\Base;
 use dioxid\config\Config;
-use dioxid\view\InterfaceEngine;
+use dioxid\view\ViewEngineInterface;
 use dioxid\view\engine\simpleEngine\ContextSandbox;
 
 use dioxid\view\exception\TemplateNotFoundException;
 
-class SimpleEngine extends Base implements InterfaceEngine {
+class SimpleEngine extends Base implements ViewEngineInterface {
 
 	/**
 	 * Fullpath to the template

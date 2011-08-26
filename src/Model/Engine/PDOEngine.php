@@ -14,7 +14,7 @@ use Exception;
 
 use dioxid\common\Base;
 use dioxid\config\Config;
-use dioxid\model\InterfaceEngine;
+use dioxid\model\ModelEngineInterface;
 
 /**
  * dioxid\model\engine$PDOEngine
@@ -24,7 +24,7 @@ use dioxid\model\InterfaceEngine;
  * @date 20.05.2011 16:52:12
  *
  */
-abstract class PDOEngine extends Base implements InterfaceEngine {
+abstract class PDOEngine extends Base implements ModelEngineInterface {
 
 	/**
 	 * Holds the PDO Instance
