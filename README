@@ -4,8 +4,9 @@
 | |_| | | |_| /  \ | || |_| |
 |____/___\___/_/\_\___|____/
 
-##Flexible PHP5.3 MVC Framework
-
+================================================================================
+    Flexible PHP5.3 MVC Framework
+================================================================================
 Dioxid is a PHP 5.3 MVC Framework, inspired by Tom Frosts
 "Hydrogen" and the Zend Framework, licensed unter
 The MIT License.
@@ -17,10 +18,10 @@ I didn't like all the conventions I'd had to face with the
 Zend Framework. Also with a growing project the internal held
 objects getting real big, even if I don't need them.
 
-So here it is: Dioxid. At the moment it works pretty well, with 
+So here it is: Dioxid. At the moment it works pretty well, with
 very few know bugs. Through this framework is still young there may be
-more, yet not know, urgent or harmless bugs. So if you discover one, 
-drop me a line or send me a patch ;) 
+more, yet not know, urgent or harmless bugs. So if you discover one,
+drop me a line or send me a patch ;)
 
 Unfortunatly there is a lack of documentation at the moment. The most
 importent files have some PHPDOc style comments with usage examples in
@@ -28,7 +29,9 @@ them. As soon as I get around to implement the last few things for
 version 1.0, I'll write a complete How to use guide with tutorials and
 a improve the PHPDoc.
 
-##How to use
+================================================================================
+    How to use
+================================================================================
 Copy the index.php and config.ini files from the examples folder into your
 project diretory and edit them to your needs.
 
@@ -38,12 +41,14 @@ is also an example file for nginx in the examples folder.
 
 Now your ready to start working on your first controller.
 
-A more detailed documentation is at the moment under constrution and 
+A more detailed documentation is at the moment under constrution and
 should be soon availbe.
 
-For a more detailed look into Dioxid inner workings or adanved usage
+For a more detailed look into Dioxid inner workings or advanced usage
 take a look at the doc folder for a PHPDoc overview.
 
-##Last but not least
+================================================================================
+    Last but not least
+================================================================================
 If your having any querstions, drop me a line ;)
 
